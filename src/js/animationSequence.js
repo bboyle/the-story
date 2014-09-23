@@ -6,8 +6,10 @@
 	// TODO use requestAnimationFrame
 	// http://codepen.io/bboyle/pen/gAuwv?editors=001
 
-	// 0-.7s: immediate: fade-in()
-	media.classList.remove( 'fade-in' );
+	// .001s-.3.001s: fade-in()
+	setTimeout(function() {
+		media.classList.remove( 'fade-in' );
+	}, 1 );
 
 	// .7-1.4s: enlarge
 	setTimeout(function() {
