@@ -1,4 +1,26 @@
+/* fade in/out */
+
+.fade {
+	transition: opacity .7s ease-in;
+}
+.fade-in {
+	opacity: 0;
+}
+
+
+/* sizing */
+
 .thumbnail {
 	max-height: 150px;
 	max-width: 150px;
+}
+
+
+.full {
+	max-width: 75%;
+	max-height: 75%;
+
+	transition:
+		max-width .7s cubic-bezier(.06,-0.35,.57,1.28),
+		max-height .7s cubic-bezier(.06,-0.35,.57,1.28);
 }
