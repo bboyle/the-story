@@ -51,16 +51,20 @@ player.play();
 ### .pause()
 
 Animates to the designated pause point and pauses playback.
+Adds 3 seconds of pause time (durations specified in the animation sequence still apply).
+
 Returns the player object (chainable).
 
 ### .play()
 
 Continues the animation sequence from the current position.
+
 Returns the player object (chainable).
 
 ## .playPause()
 
 Toggles between play and pause states.
+
 Returns the player object (chainable).
 
 ## Customising the sequence of animations

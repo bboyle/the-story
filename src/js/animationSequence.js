@@ -15,6 +15,7 @@ function riseVisionStoryPlayer() {
 	var sequencePauseIndex = 1;
 
 	var playing = false;
+	var pausedTimeout = 3000;
 
 
 	// render the animation sequence
@@ -48,10 +49,15 @@ function riseVisionStoryPlayer() {
 			}
 		}
 
-		// loop
-		if ( playing ) {
-			requestAnimationFrame( animateSequence );
+		// paused?
+		if ( ! playing ) {
+			// set pause duration
+			then += pausedTimeout;
+			playing = true;
 		}
+
+		// loop
+		requestAnimationFrame( animateSequence );
 	}
 
 
@@ -74,10 +80,12 @@ function riseVisionStoryPlayer() {
 
 	// play
 	function play() {
+		then = Math.min( then, Date.now() );
 		if ( ! playing ) {
 			playing = true;
 			requestAnimationFrame( animateSequence );
 		}
+
 		return player;
 	}
 
@@ -91,20 +99,16 @@ function riseVisionStoryPlayer() {
 	}
 
 
-	// start it up!
-	playing = false;
-	play();
-
-
 	// toggle playback on click
 	media.addEventListener( 'click', playToggle );
 
 
 	// return API
-	return player = {
+	player = {
 		pause: pause,
 		play: play,
 		playPause: playToggle,
 		setMedia: setMedia
 	};
+	return player;
 }
