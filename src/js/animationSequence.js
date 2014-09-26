@@ -1,4 +1,4 @@
-(function() {
+var riseVisionStoryPlayer = (function() {
 	'use strict';
 
 	var images = [
@@ -39,16 +39,20 @@
 
 	var media = document.getElementById( 'media' );
 	var sequence = [
-		{ duration:  100, on: 'thumbnail',         off: 'fade-in'   },
-		{ duration:  600, on: 'full',              off: 'thumbnail' },
-		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'      },
-		{ duration:  700, on: 'thumbnail',         off: 'full'      },
+		{ duration:  100, on: 'thumbnail',         off: 'fade-in'           },
+		{ duration:  600, on: 'full',              off: 'thumbnail fade-in' },
+		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
+		{ duration:  700, on: 'thumbnail',         off: 'full'              },
 	];
+	// TODO flag steps that can be paused, find the next 'pausable' point
+	var sequencePauseIndex = 1;
 
+
+	var playing = false;
 
 	var i = 0;
 	var then = Date.now();
-	requestAnimationFrame(function animateSequence() {
+	function animateSequence() {
 		var now = Date.now();
 
 		// time to update?
@@ -78,7 +82,39 @@
 		}
 
 		// loop
-		requestAnimationFrame( animateSequence );
-	});
+		if ( playing ) {
+			requestAnimationFrame( animateSequence );
+		}
+	}
+
+
+	// pause the slideshow
+	function pause() {
+		if ( playing ) {
+			i = sequencePauseIndex;
+			then = Date.now() - sequence[ sequencePauseIndex ].duration;
+			playing = false;
+		}
+	}
+
+	// play
+	function play() {
+		if ( ! playing ) {
+			playing = true;
+			requestAnimationFrame( animateSequence );
+		}
+	}
+
+
+	// start it up!
+	playing = false;
+	play();
+
+
+	// return API
+	return {
+		pause: pause,
+		play: play
+	};
 
 }());
