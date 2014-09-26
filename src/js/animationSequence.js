@@ -12,7 +12,6 @@ function riseVisionStoryPlayer() {
 		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
 		{ duration:  700, on: 'thumbnail',         off: 'full'              },
 	];
-	// TODO flag steps that can be paused, find the next 'pausable' point
 	var sequencePauseIndex = 1;
 
 	var playing = false;
