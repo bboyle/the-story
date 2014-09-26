@@ -17,6 +17,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 
 - View the proof of concept in Chrome
 - Edit in text editor of your choice
+- Read [documentation](Documentation.md)
 
 ### Run Local
 
