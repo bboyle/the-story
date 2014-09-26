@@ -83,6 +83,15 @@ function riseVisionStoryPlayer() {
 		return player;
 	}
 
+	// pause toggle
+	function playToggle() {
+		if ( playing ) {
+			pause();
+		} else {
+			play();
+		}
+	}
+
 
 	// start it up!
 	playing = false;
@@ -93,6 +102,7 @@ function riseVisionStoryPlayer() {
 	return player = {
 		pause: pause,
 		play: play,
+		playPause: playToggle,
 		setMedia: setMedia
 	};
 }
