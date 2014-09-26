@@ -98,6 +98,10 @@ function riseVisionStoryPlayer() {
 	play();
 
 
+	// toggle playback on click
+	media.addEventListener( 'click', playToggle );
+
+
 	// return API
 	return player = {
 		pause: pause,
