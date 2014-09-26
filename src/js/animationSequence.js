@@ -34,7 +34,6 @@ function riseVisionStoryPlayer() {
 				media.classList.remove(  oldClass );
 			});
 
-
 			// prepare next image
 			if ( i === 0 ) {
 				nextImage.src = images[ Math.floor( Math.random() * images.length ) ];
