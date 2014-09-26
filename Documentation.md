@@ -33,17 +33,30 @@ Load these scripts at the end of your page (before closing `</body>` tag):
 
 ## Customising the media displayed
 
-The initial media shown is hardcoded in the HTML within the media container above. 
+The initial media shown is hardcoded in the HTML within the media container above. Specify other media when calling the script:
+
+```javascript
+var player = riseVisionStoryPlayer();
+player.setMedia([
+    'http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg',
+    'http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg',
+    'http://farm8.staticflickr.com/7423/9429359808_6a91f7debf_b.jpg',
+    …
+]);
+player.play();
+```
 
 ## Controlling the media player
 
 ### .pause()
 
 Animates to the designated pause point and pauses playback.
+Returns the player object.
 
 ### .play()
 
 Continues the animation sequence from the current position.
+Returns the player object.
 
 ## Customising the sequence of animations
 
