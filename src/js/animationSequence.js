@@ -19,9 +19,14 @@ function riseVisionStoryPlayer() {
 
 	// setup media
 	for ( var i = 0; i < mediaElements.length; i++ ) {
-		mediaElements[ i ].classList.add( 'fade' );
-		mediaElements[ i ].classList.add( 'fade-in' );
-		mediaElements[ i ].classList.add( 'thumbnail' );
+		var item = mediaElements[ i ];
+		item.classList.add( 'fade' );
+		item.classList.add( 'fade-in' );
+		item.classList.add( 'thumbnail' );
+
+		// randomly position
+		item.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
+		item.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
 	}
 
 

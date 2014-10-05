@@ -20,11 +20,19 @@
 }
 
 .full {
+	top: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
 	max-width: 75%;
 	max-height: 75%;
 	z-index: 2;
 
 	transition:
 		max-width .7s cubic-bezier(.06,-0.35,.57,1.28),
-		max-height .7s cubic-bezier(.06,-0.35,.57,1.28);
+		max-height .7s cubic-bezier(.06,-0.35,.57,1.28),
+		top .5s cubic-bezier(.65,1.36,.94,1.09),
+		bottom .5s cubic-bezier(.65,1.36,.94,1.09),
+		left .5s cubic-bezier(.65,1.36,.94,1.09),
+		right .5s cubic-bezier(.65,1.36,.94,1.09);
 }
