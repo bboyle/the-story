@@ -7,7 +7,7 @@ function riseVisionStoryPlayer() {
 
 	var sequence = [
 		{ duration:  100, on: 'thumbnail',         off: 'fade-in'           },
-		{ duration:  600, on: 'full',              off: 'thumbnail fade-in' },
+		{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
 		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
 		{ duration:  700, on: 'thumbnail',         off: 'full'              },
 	];
