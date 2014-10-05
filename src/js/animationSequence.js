@@ -6,7 +6,7 @@ function riseVisionStoryPlayer() {
 	var mediaIndex = 0;
 
 	var sequence = [
-		{ duration:  100, on: 'thumbnail',         off: 'fade-in'           },
+		{ duration:  100, on: 'thumbnail',         off: 'fade-in hidden'    },
 		{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
 		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
 		{ duration:  700, on: 'thumbnail',         off: 'full'              },
@@ -20,6 +20,7 @@ function riseVisionStoryPlayer() {
 	// setup media
 	for ( var i = 0; i < mediaElements.length; i++ ) {
 		var item = mediaElements[ i ];
+		item.classList.add( 'hidden' );
 		item.classList.add( 'fade' );
 		item.classList.add( 'fade-in' );
 		item.classList.add( 'thumbnail' );
