@@ -19,32 +19,32 @@ function riseVisionStoryPlayer() {
 
 
 	// render the animation sequence
-	var i = 0;
+	var animationIndex = 0;
 	var then = Date.now();
 	function animateSequence() {
 		var now = Date.now();
 
 		// time to update?
-		if ( now - then >= sequence[ i ].duration ) {
+		if ( now - then >= sequence[ animationIndex ].duration ) {
 			// update classes
-			sequence[ i ].on.split( ' ' ).forEach(function( newClass ) {
+			sequence[ animationIndex ].on.split( ' ' ).forEach(function( newClass ) {
 				media.classList.add( newClass );
 			});
-			sequence[ i ].off.split( ' ' ).forEach(function( oldClass ) {
+			sequence[ animationIndex ].off.split( ' ' ).forEach(function( oldClass ) {
 				media.classList.remove(  oldClass );
 			});
 
 			// prepare next image
-			if ( i === 0 ) {
+			if ( animationIndex === 0 ) {
 				nextImage.src = images[ Math.floor( Math.random() * images.length ) ].src;
 			}
 
 			// next in sequence
 			then = now;
-			i = ( i + 1 ) % sequence.length;
+			animationIndex = ( animationIndex + 1 ) % sequence.length;
 
 			// new media?
-			if ( i === 0 ) {
+			if ( animationIndex === 0 ) {
 				media.getElementsByTagName( 'img' )[ 0 ].src = nextImage.src;
 			}
 		}
@@ -64,7 +64,7 @@ function riseVisionStoryPlayer() {
 	// pause the slideshow
 	function pause() {
 		if ( playing ) {
-			i = sequencePauseIndex;
+			animationIndex = sequencePauseIndex;
 			then = Date.now() - sequence[ sequencePauseIndex ].duration;
 			playing = false;
 		}
