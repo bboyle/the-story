@@ -27,6 +27,7 @@ function riseVisionStoryPlayer() {
 		// randomly position
 		item.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
 		item.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
+		item.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 720 ) + 'deg)';
 	}
 
 
