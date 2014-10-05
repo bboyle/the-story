@@ -15,6 +15,7 @@ main {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	width: 100%;
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
@@ -30,5 +31,44 @@ img {
 }
 
 nav {
-	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+nav ul,
+nav li {
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+nav li {
+	flex: 1 1 auto;
+	max-width: 10%;
+	padding: .5%;
+}
+nav img {
+	border-radius: 5%;
+}
+
+nav button {
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	opacity: .5;
+	transition: opacity 200ms ease-in;
+}
+nav button:hover,
+nav button:focus {
+	opacity: 1;
 }
