@@ -33,17 +33,16 @@ Load these scripts at the end of your page (before closing `</body>` tag):
 
 ## Customising the media displayed
 
-The initial media shown is hardcoded in the HTML within the media container above. Specify other media when calling the script:
+The initial media shown is hardcoded in the HTML within the media container above. Other media is placed inside a nav element which is hidden in the UI. The `button` elements are used for accessibility to support selecting specific media items.
 
-```javascript
-var player = riseVisionStoryPlayer();
-player.setMedia([
-    'http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg',
-    'http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg',
-    'http://farm8.staticflickr.com/7423/9429359808_6a91f7debf_b.jpg',
-    …
-]);
-player.play();
+```html
+    <nav role="navigation">
+        <ul>
+            <li><button><img src="http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg" alt="Test image"></button></li>
+            <li><button><img src="http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg" alt="Test image"></button></li>
+            …
+        </ul>
+    </nav>
 ```
 
 ## Controlling the media player

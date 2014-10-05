@@ -2,7 +2,7 @@ function riseVisionStoryPlayer() {
 	'use strict';
 
 	var player = {};
-	var images;
+	var images = document.querySelectorAll( 'nav img' );
 	var nextImage = new Image();
 
 	var media = document.getElementById( 'media' );
@@ -36,7 +36,7 @@ function riseVisionStoryPlayer() {
 
 			// prepare next image
 			if ( i === 0 ) {
-				nextImage.src = images[ Math.floor( Math.random() * images.length ) ];
+				nextImage.src = images[ Math.floor( Math.random() * images.length ) ].src;
 			}
 
 			// next in sequence
@@ -58,13 +58,6 @@ function riseVisionStoryPlayer() {
 
 		// loop
 		requestAnimationFrame( animateSequence );
-	}
-
-
-	// setMedia
-	function setMedia( media ) {
-		images = media;
-		return player;
 	}
 
 
@@ -107,8 +100,7 @@ function riseVisionStoryPlayer() {
 	player = {
 		pause: pause,
 		play: play,
-		playPause: playToggle,
-		setMedia: setMedia
+		playPause: playToggle
 	};
 	return player;
 }
