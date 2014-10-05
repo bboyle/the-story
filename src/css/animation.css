@@ -5,23 +5,24 @@
 	transition: opacity .3s ease-in;
 }
 .fade-in {
-	opacity: 0;
+	opacity: .2;
+	z-index: 1;
 }
 
 
 /* sizing */
 
 .thumbnail {
-	max-height: 150px;
 	max-width: 150px;
+	max-height: 150px;
 
 	transition: all .3s ease-in;
 }
 
-
 .full {
 	max-width: 75%;
 	max-height: 75%;
+	z-index: 2;
 
 	transition:
 		max-width .7s cubic-bezier(.06,-0.35,.57,1.28),

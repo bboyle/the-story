@@ -2,10 +2,9 @@ function riseVisionStoryPlayer() {
 	'use strict';
 
 	var player = {};
-	var images = document.querySelectorAll( 'nav img' );
-	var nextImage = new Image();
+	var mediaElements = document.querySelectorAll( 'li' );
+	var mediaIndex = 0;
 
-	var media = document.getElementById( 'media' );
 	var sequence = [
 		{ duration:  100, on: 'thumbnail',         off: 'fade-in'           },
 		{ duration:  600, on: 'full',              off: 'thumbnail fade-in' },
@@ -18,6 +17,14 @@ function riseVisionStoryPlayer() {
 	var pausedTimeout = 3000;
 
 
+	// setup media
+	for ( var i = 0; i < mediaElements.length; i++ ) {
+		mediaElements[ i ].classList.add( 'fade' );
+		mediaElements[ i ].classList.add( 'fade-in' );
+		mediaElements[ i ].classList.add( 'thumbnail' );
+	}
+
+
 	// render the animation sequence
 	var animationIndex = 0;
 	var then = Date.now();
@@ -28,24 +35,19 @@ function riseVisionStoryPlayer() {
 		if ( now - then >= sequence[ animationIndex ].duration ) {
 			// update classes
 			sequence[ animationIndex ].on.split( ' ' ).forEach(function( newClass ) {
-				media.classList.add( newClass );
+				mediaElements[ mediaIndex ].classList.add( newClass );
 			});
 			sequence[ animationIndex ].off.split( ' ' ).forEach(function( oldClass ) {
-				media.classList.remove(  oldClass );
+				mediaElements[ mediaIndex ].classList.remove(  oldClass );
 			});
-
-			// prepare next image
-			if ( animationIndex === 0 ) {
-				nextImage.src = images[ Math.floor( Math.random() * images.length ) ].src;
-			}
 
 			// next in sequence
 			then = now;
 			animationIndex = ( animationIndex + 1 ) % sequence.length;
 
-			// new media?
+			// prepare next image
 			if ( animationIndex === 0 ) {
-				media.getElementsByTagName( 'img' )[ 0 ].src = nextImage.src;
+				mediaIndex = Math.floor( Math.random() * mediaElements.length );
 			}
 		}
 
@@ -92,8 +94,8 @@ function riseVisionStoryPlayer() {
 	}
 
 
-	// toggle playback on click
-	media.addEventListener( 'click', playToggle );
+	// select media item on click
+	// media.addEventListener( 'click', playToggle );
 
 
 	// return API

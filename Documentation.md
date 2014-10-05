@@ -18,9 +18,11 @@ In the body of your page, add a media container:
 
 ```html
     <main role="main">
-        <div id="media" class="thumbnail fade fade-in">
-            <img src="(YOUR IMAGE FILE GOES HERE)" alt="(YOUR ALT TEXT)">
-        </div>
+        <ul>
+            <li><button><img src="http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg" alt="Test image"></button></li>
+            <li><button><img src="http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg" alt="Test image"></button></li>
+            …
+        </ul>
     </main>
 ```
 
@@ -33,17 +35,10 @@ Load these scripts at the end of your page (before closing `</body>` tag):
 
 ## Customising the media displayed
 
-The initial media shown is hardcoded in the HTML within the media container above. Other media is placed inside a nav element which is hidden in the UI. The `button` elements are used for accessibility to support selecting specific media items.
+You control the list of media items inside the `main` container. The `button` elements are used for accessibility to support selecting specific media items.
 
-```html
-    <nav role="navigation">
-        <ul>
-            <li><button><img src="http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg" alt="Test image"></button></li>
-            <li><button><img src="http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg" alt="Test image"></button></li>
-            …
-        </ul>
-    </nav>
-```
+Currently, only images are supported.
+
 
 ## Controlling the media player
 
