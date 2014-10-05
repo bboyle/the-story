@@ -3,13 +3,15 @@
 
 
 	var bodyStyle = document.body.style;
-	var mainStyle = document.getElementsByTagName( 'main' )[ 0 ].style;
+	// var mainStyle = document.getElementsByTagName( 'main' )[ 0 ].style;
+	// var mainListStyle = document.getElementsByTagName( 'ul' )[ 0 ].style;
 
 
 	// set body to size of viewport
 	function scaleBodyToFitWindow() {
 		// 100% width is easy in css // document.body.style.width = window.innerWidth + 'px';
-		mainStyle.height = bodyStyle.height = window.innerHeight + 'px';
+		// mainListStyle.height = mainStyle.height = bodyStyle.height = window.innerHeight + 'px';
+		bodyStyle.height = window.innerHeight + 'px';
 	}
 
 
