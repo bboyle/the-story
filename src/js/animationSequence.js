@@ -9,7 +9,7 @@ function riseVisionStoryPlayer() {
 		{ duration:  100, on: 'thumbnail',         off: 'fade-in hidden'    },
 		{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
 		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
-		{ duration:  700, on: 'thumbnail',         off: 'full'              },
+		{ duration:  700, on: 'fade-in thumbnail', off: 'full'              },
 	];
 	var sequencePauseIndex = 1;
 
@@ -101,8 +101,39 @@ function riseVisionStoryPlayer() {
 	}
 
 
+	// click on media
+	function playerClick( event ) {
+		var item = event.target;
+		var i = 0;
+		// find LI element
+		while ( /^BUTTON|IMG$/i.test( item.tagName )) {
+			item = item.parentNode;
+		}
+		console.log( item );
+		// is it a media element? find it
+		for ( i = 0; i < mediaElements.length && mediaElements[ i ] !== item; i++ );
+		if ( i < mediaElements.length ) {
+			pause();
+			// TODO DRY: apply animation
+			// finish current element
+			sequence[ sequence.length - 1 ].on.split( ' ' ).forEach(function( newClass ) {
+				mediaElements[ mediaIndex ].classList.add( newClass );
+			});
+			sequence[ sequence.length - 1 ].off.split( ' ' ).forEach(function( oldClass ) {
+				mediaElements[ mediaIndex ].classList.remove(  oldClass );
+			});
+
+			// select new element
+			mediaIndex = i;
+			// reset animation
+			animationIndex = 0;
+			play();
+		}
+	}
+
+
 	// select media item on click
-	// media.addEventListener( 'click', playToggle );
+	document.getElementsByTagName( 'main' )[ 0 ].addEventListener( 'click', playerClick );
 
 
 	// return API
