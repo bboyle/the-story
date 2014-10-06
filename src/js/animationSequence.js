@@ -105,8 +105,9 @@ function riseVisionStoryPlayer() {
 	function playerClick( event ) {
 		var item = event.target;
 		var i = 0;
-		// find LI element
-		while ( /^BUTTON|IMG$/i.test( item.tagName )) {
+
+		// find LI ancestor
+		while ( /^BUTTON|IMG$/i.test( item.tagName ) && item.parentNode ) {
 			item = item.parentNode;
 		}
 		// is it a media element? find it
