@@ -109,10 +109,15 @@ function riseVisionStoryPlayer() {
 		while ( /^BUTTON|IMG$/i.test( item.tagName )) {
 			item = item.parentNode;
 		}
-		console.log( item );
 		// is it a media element? find it
 		for ( i = 0; i < mediaElements.length && mediaElements[ i ] !== item; i++ );
-		if ( i < mediaElements.length ) {
+
+		// selected active item
+		if ( i === mediaIndex ) {
+			// just pause
+			pause();
+
+		} else if ( i < mediaElements.length ) {
 			pause();
 			// TODO DRY: apply animation
 			// finish current element
