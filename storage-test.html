@@ -50,7 +50,7 @@
             }, authorizeCallback );
         }
 
-        function getFiles(){
+        function getFiles() {
             var parameters = {};
             // find companyID in URL at risevision after logging in
             parameters[ 'companyId' ] = '76ef5f8c-cd7b-4041-bff2-728a81366d12';
@@ -62,8 +62,8 @@
             });
         }
     
-        function signin(){
-            gapiAuth(false, function(){
+        function signin() {
+            gapiAuth( false, function() {
                 location.reload();
             });
         }
