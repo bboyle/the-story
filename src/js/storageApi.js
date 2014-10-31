@@ -3,11 +3,10 @@ var riseVisionStorage = function() {
 
 	var storageApi = {};
 
-
 	// get all media from storage
-	storageApi.getMedia = function() {
+	storageApi.getMedia = function( callback ) {
 		// mock: return array of images
-		return new Array(
+		callback(new Array(
 			'http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg',
 			'http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg',
 			'http://farm8.staticflickr.com/7423/9429359808_6a91f7debf_b.jpg',
@@ -39,7 +38,7 @@ var riseVisionStorage = function() {
 			'http://farm8.staticflickr.com/7349/9615775362_07c12614ec_b.jpg',
 			'http://farm8.staticflickr.com/7373/9622775710_35d7dbfd3c_b.jpg',
 			'http://farm6.staticflickr.com/5445/9626644145_4ac049cc49_b.jpg'
-		);
+		));
 	};
 
 	return storageApi;
