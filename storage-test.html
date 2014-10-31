@@ -35,7 +35,7 @@
 
         function gapiClientLoad() {
             gapi.client.load( 'storage', 'v0.01', function() {
-                if (gapi.client.storage) {
+                if ( gapi.client.storage ) {
                     document.getElementById( 'loaded' ).innerHTML = 'STORAGE API is loaded';
                     gapiAuth( true, getFiles );
                 }
