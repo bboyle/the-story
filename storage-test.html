@@ -51,10 +51,13 @@
         }
 
         function getFiles() {
-            var parameters = {};
+            var parameters = {
+                folder: 'the-story'
+            };
             // find companyID in URL at risevision after logging in
             parameters[ 'companyId' ] = '76ef5f8c-cd7b-4041-bff2-728a81366d12';
             gapi.client.storage.files.get( parameters ).execute(function( resp ) {
+                console.log( resp );
                 document.getElementById( 'message' ).innerHTML = resp.message;
                 document.getElementById( 'result' ).innerHTML = resp.result ? 'true' : 'false';
                 document.getElementById( 'code' ).innerHTML =  resp.code;
