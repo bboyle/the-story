@@ -5,10 +5,9 @@ var riseVisionStorage = function() {
 
 	// get all media from storage
 	storageApi.getMedia = function getMedia( callback ) {
-		var parameters = {
-			companyId: '76ef5f8c-cd7b-4041-bff2-728a81366d12',
-			folder: 'the-story'
-		};
+		var COMPANY_ID = '76ef5f8c-cd7b-4041-bff2-728a81366d12';
+		var FOLDER = 'the-story';
+		var url = 'https://www.googleapis.com/storage/v1/b/risemedialibrary-' + encodeURIComponent( COMPANY_ID ) + '/o?delimiter=' + encodeURIComponent( '/' ) + '&prefix=' + encodeURIComponent( FOLDER + '/' );
 
 		// only images
 		function filterImages( file ) {
@@ -19,12 +18,20 @@ var riseVisionStorage = function() {
 			return file.mediaLink;
 		}
 
-		gapi.client.storage.files.get( parameters ).execute(function( response ) {
+		// process JSON response
+		function handleJson() {
+			var json = JSON.parse( this.responseText );
 			// just grab the image URLs
-			var images = response.files.filter( filterImages ).map( mapMediaLinks );
+			var images = json.items.filter( filterImages ).map( mapMediaLinks );
 			// run call back on images
 			callback( images );
-		});
+		}
+
+		// https://www.googleapis.com/storage/v1/b/risemedialibrary-76ef5f8c-cd7b-4041-bff2-728a81366d12/o?delimiter=%2F&prefix=the-story%2F
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener( 'load', handleJson, false );
+		xhr.open( 'GET', url, true );
+		xhr.send();
 	};
 
 	return storageApi;
