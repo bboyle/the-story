@@ -1,8 +1,8 @@
-function getMediaFromStorage( callback ) {
+function getMediaFromStorage( company, folder, callback ) {
 	'use strict';
 
 	var mediaList = document.querySelector( 'main ul' );
-	riseVisionStorage().getMedia(function( images ) {
+	riseVisionStorage().getMedia( company, folder, function( images ) {
 		// console.log( 'getMedia', images );
 		images.forEach(function( src ) {
 			var li = document.createElement( 'li' );
