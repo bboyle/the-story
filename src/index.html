@@ -53,16 +53,20 @@
 	<script src="js/getMediaFromStorage.js"></script>
 	<script src="js/animationSequence.js"></script>
 	<script>
+	(function() {
+		'use strict';
 
-	// mediaLoaded
-	function mediaLoaded() {
-		// console.log( 'mediaLoaded()' );
-		riseVisionStoryPlayer().play();
-	}
+		var COMPANY_ID = '76ef5f8c-cd7b-4041-bff2-728a81366d12';
+		var FOLDER = 'the-story';
 
-	// run
-	getMediaFromStorage( mediaLoaded );
+		// mediaLoaded
+		function mediaLoaded() {
+			riseVisionStoryPlayer().play();
+		}
 
+		// run
+		getMediaFromStorage( COMPANY_ID, FOLDER, mediaLoaded );
+	}());
 	</script>
 </body>
 </html>

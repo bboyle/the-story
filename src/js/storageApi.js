@@ -4,10 +4,8 @@ var riseVisionStorage = function() {
 	var storageApi = {};
 
 	// get all media from storage
-	storageApi.getMedia = function getMedia( callback ) {
-		var COMPANY_ID = '76ef5f8c-cd7b-4041-bff2-728a81366d12';
-		var FOLDER = 'the-story';
-		var url = 'https://www.googleapis.com/storage/v1/b/risemedialibrary-' + encodeURIComponent( COMPANY_ID ) + '/o?delimiter=' + encodeURIComponent( '/' ) + '&prefix=' + encodeURIComponent( FOLDER + '/' );
+	storageApi.getMedia = function getMedia( company, folder, callback ) {
+		var url = 'https://www.googleapis.com/storage/v1/b/risemedialibrary-' + encodeURIComponent( company ) + '/o?delimiter=' + encodeURIComponent( '/' ) + '&prefix=' + encodeURIComponent( folder + '/' );
 
 		// only images
 		function filterImages( file ) {
