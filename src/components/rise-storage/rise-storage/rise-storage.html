@@ -1,0 +1,210 @@
+<!--
+The `rise-storage` element retrieves URLs of files stored in Rise Storage.
+
+To use it, first load `webcomponents.js`. Many browsers have yet to implement the various web components APIs. Until they do, `webcomponents.js` provides polyfill support. Be sure to include this file before any code that touches the DOM.
+
+Next, load the element file using an HTML Import.
+
+For example:
+
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+        <link rel="import" href="bower_components/web-component-rise-storage/rise-storage/rise-storage.html">
+      </head>
+      <body>
+        <rise-storage
+          companyId="my-company-id"
+          folder="my-folder"
+          fileName="my-image.png"
+          folderRefresh="60"></rise-storage>
+
+        <script>
+          // Wait for 'polymer-ready'. Ensures the element is upgraded.
+          window.addEventListener('polymer-ready', function(e) {
+            var storage = document.querySelector('rise-storage');
+
+            // Respond to events it fires.
+            storage.addEventListener('rise-storage-response', function(e) {
+              console.log(e.detail[0]); // URL to the file.
+            });
+
+            storage.go(); // Call its API methods.
+          });
+        </script>
+      </body>
+    </html>
+
+You can trigger a request explicitly by calling `go` on the element.
+
+@element rise-storage
+@status alpha
+@homepage https://github.com/Rise-Vision/web-component-rise-storage
+-->
+<polymer-element name="rise-storage" attributes="companyId folder fileName folderRefresh">
+  <template>
+    <core-ajax id="ajax"
+      url="{{url}}"
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      on-core-error="{{handleError}}"
+      auto>
+    </core-ajax>
+  </template>
+
+  <script>
+    Polymer("rise-storage", {
+      /**
+       * Fired when a response is received.
+       *
+       * @event rise-storage-response
+       */
+
+      /**
+       * Fired when an error is received.
+       *
+       * @event rise-storage-error
+       */
+
+      /**
+       * The ID of the Company.
+       *
+       * @attribute companyId
+       * @type string
+       * @default ''
+       */
+      companyId: "",
+
+      /**
+       * The folder name.
+       *
+       * @attribute folder
+       * @type string
+       * @default ''
+       */
+      folder: "",
+
+      /**
+       * The file name within the folder.
+       *
+       * @attribute fileName
+       * @type string
+       * @default ''
+       */
+      fileName: "",
+
+      /**
+       * The number of seconds before the folder will be checked for changes.
+
+       *
+       * @attribute folderRefresh
+       * @type number
+       * @default 0 (no refresh)
+       */
+      folderRefresh: 0,
+
+      /**
+       * The URL target of the request.
+       *
+       * @property url
+       * @type string
+       * @default ''
+       */
+      url: "",
+
+      ready: function() {
+        this.setUrl();
+      },
+
+      setUrl: function() {
+        var url = "";
+
+        if (this.companyId) {
+          url = "https://www.googleapis.com/storage/v1/b/risemedialibrary-" + encodeURIComponent(this.companyId) + "/o";
+
+          if (this.folder) {
+            // Get a specific file in a specific folder.
+            if (this.fileName) {
+              url += "?delimiter=/&prefix=" + encodeURIComponent(this.folder) + "/" + encodeURIComponent(this.fileName);
+            }
+            // Get all files in a specific folder.
+            else {
+              url += "?delimiter=/&prefix=" + encodeURIComponent(this.folder) + "/";
+            }
+          }
+          // Get a specific file in a bucket.
+          else if (this.fileName) {
+            url += "/" + encodeURIComponent(this.fileName);
+          }
+
+          this.url = url;
+        }
+
+        this.startTimer();
+      },
+
+      startTimer: function() {
+        // Don't refresh individual files.
+        if (!this.fileName) {
+          this.folderRefresh = parseInt(this.folderRefresh, 10);
+
+          if (!isNaN(this.folderRefresh) && this.folderRefresh !== 0) {
+            this.job("refresh", function() {
+              this.go();
+              this.startTimer();
+            }, this.folderRefresh * 1000);
+          }
+        }
+      },
+
+      companyIdChanged: function() {
+        this.setUrl();
+      },
+
+      folderChanged: function() {
+        this.setUrl();
+      },
+
+      fileNameChanged: function() {
+        this.setUrl();
+      },
+
+      handleResponse: function(e, resp) {
+        var urls = [];
+
+        // Send back array of URLs.
+        if (resp && resp.response && resp.response.items) {
+          resp.response.items.forEach(function(elem, index) {
+            // Check that this is not the folder itself.
+            if (elem.contentType && elem.contentType !== "text/plain") {
+              if (elem.mediaLink) {
+                urls.push(elem.mediaLink);
+              }
+            }
+          });
+        }
+        else if (resp && resp.response && resp.response.mediaLink) {
+          urls.push(resp.response.mediaLink);
+        }
+
+        this.fire("rise-storage-response", urls);
+      },
+
+      handleError: function(e, resp) {
+        console.log("Error: " + resp.xhr.status + " " + resp.xhr.statusText);
+
+        this.fire("rise-storage-error", resp);
+      },
+
+      /**
+       * Performs an Ajax request to the specified URL.
+       *
+       * @method go
+       */
+      go: function() {
+        this.$.ajax.go();
+      }
+    });
+  </script>
+</polymer-element>
