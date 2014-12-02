@@ -1,0 +1,19 @@
+{
+  "name": "The Story",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Rise-Vision/present-data",
+  "authors": [
+    "Ben Boyle <benjamins.boyle@gmail.com>"
+  ],
+  "description": "Visual presentation of data (like pictures on a coffee table)",
+  "main": "src/index.html",
+  "license": "GPLv3",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
