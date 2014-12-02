@@ -25,6 +25,7 @@ var riseVisionStorage = function() {
 			callback( images );
 		}
 
+		// https://cloud.google.com/storage/docs/json_api/v1/objects/get
 		// https://www.googleapis.com/storage/v1/b/risemedialibrary-76ef5f8c-cd7b-4041-bff2-728a81366d12/o?delimiter=%2F&prefix=the-story%2F
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener( 'load', handleJson, false );

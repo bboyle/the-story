@@ -21,7 +21,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 
 ### Run Local
 
-- no special requirements
+- view through a local webserver. [http-server](https://www.npmjs.org/package/http-server) recommended.
 
 ### Dependencies
 
