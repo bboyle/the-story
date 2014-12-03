@@ -1,4 +1,4 @@
-function riseVisionStoryPlayer() {
+function riseVisionStoryPlayer( urls ) {
 	'use strict';
 
 	var player = {};
@@ -15,6 +15,25 @@ function riseVisionStoryPlayer() {
 
 	var playing = false;
 	var pausedTimeout = 3000;
+
+
+	// setup html
+	var mediaList = document.querySelector( 'main > ul' );
+	if ( ! mediaList ) {
+		mediaList = document.createElement( 'ul' );
+		document.querySelector( 'main' ).appendChild( mediaList );
+	}
+	urls.forEach(function( src ) {
+		var li = document.createElement( 'li' );
+		var button = document.createElement( 'button' );
+		var img = document.createElement( 'img' );
+		img.src = src;
+
+		li.appendChild( button );
+		button.appendChild( img );
+		mediaList.appendChild( li );
+	});
+	var mediaElements = mediaList.children;
 
 
 	// setup media

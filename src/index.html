@@ -13,7 +13,6 @@
 
 
 	<main role="main">
-		<ul></ul>
 
 		<rise-storage
 			companyId="76ef5f8c-cd7b-4041-bff2-728a81366d12"
@@ -24,34 +23,20 @@
 
 
 	<script src="js/viewportSize.js"></script>
-	<script src="js/animationSequence.js"></script>
+	<script src="js/riseVisionStoryPlayer.js"></script>
 	<script>
 		window.addEventListener( 'polymer-ready', function( e ) {
 			'use strict';
 			var storage = document.querySelector( 'rise-storage' );
 
-			var mediaList = document.querySelector( 'main ul' );
-
-			// get file list from storage
+			// got file list from storage
 			storage.addEventListener( 'rise-storage-response', function( e ) {
-
-				// append to HTML
-				e.detail.forEach(function( src ) {
-					var li = document.createElement( 'li' );
-					var button = document.createElement( 'button' );
-					var img = document.createElement( 'img' );
-					img.src = src;
-
-					li.appendChild( button );
-					button.appendChild( img );
-					mediaList.appendChild( li );
-				});
-
-				// start the player
-				riseVisionStoryPlayer().play();
+				// update/start the player
+				riseVisionStoryPlayer( e.detail ).play();
 			});
 
-			storage.go(); // Call its API methods.
+			// request files from storage
+			storage.go();
 		});
 	</script>
 </body>
