@@ -17,7 +17,7 @@ function riseVisionStoryPlayer( urls ) {
 	var pausedTimeout = 3000;
 
 
-	// setup html
+	// setup DOM
 	var mediaList = document.querySelector( 'main > ul' );
 	if ( ! mediaList ) {
 		mediaList = document.createElement( 'ul' );
@@ -32,23 +32,16 @@ function riseVisionStoryPlayer( urls ) {
 		li.appendChild( button );
 		button.appendChild( img );
 		mediaList.appendChild( li );
-	});
-	var mediaElements = mediaList.children;
 
-
-	// setup media
-	for ( var i = 0; i < mediaElements.length; i++ ) {
-		var item = mediaElements[ i ];
-		item.classList.add( 'hidden' );
-		item.classList.add( 'fade' );
-		item.classList.add( 'fade-in' );
-		item.classList.add( 'thumbnail' );
+		// initial animation classes
+		li.classList.add( 'hidden', 'fade', 'fade-in', 'thumbnail' );
 
 		// randomly position
-		item.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
-		item.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
-		item.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
-	}
+		li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
+		li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
+		li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
+	});
+	var mediaElements = mediaList.children;
 
 
 	// render the animation sequence
