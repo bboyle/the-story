@@ -10,6 +10,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 - POSH (plain ol' semantic HTML)
 - CSS3
 - vanilla javascript
+- node and bower
 
 ## Development
 
@@ -19,6 +20,12 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 - Edit in text editor of your choice
 - Read [documentation](Documentation.md)
 
+For convenience, dependencies are included in this repository. If you wish to manage dependencies with package manager tools:
+
+- install node and npm package manager
+- install bower package manager: `npm install -g bower`
+- install dependencies using: `bower install`
+
 ### Run Local
 
 - view through a local webserver. [http-server](https://www.npmjs.org/package/http-server) recommended.
@@ -26,6 +33,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 ### Dependencies
 
 - internet connection for loading media
+- [rise-storage web component](https://github.com/Rise-Vision/web-component-rise-storage) (packaged in this repository)
 
 ### Testing
 
