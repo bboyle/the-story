@@ -2,7 +2,7 @@ function riseVisionStoryPlayer( urls ) {
 	'use strict';
 
 	var player = {};
-	var mediaElements = document.querySelectorAll( 'li' );
+	var mediaElements;
 	var mediaIndex = 0;
 
 	var sequence = [
@@ -19,19 +19,28 @@ function riseVisionStoryPlayer( urls ) {
 
 	// setup DOM
 	var mediaList = document.querySelector( 'main > ul' );
+	var oldMediaList = {};
 	if ( ! mediaList ) {
 		mediaList = document.createElement( 'ul' );
 		document.querySelector( 'main' ).appendChild( mediaList );
+	} else {
+		Array.prototype.forEach.call( mediaList.children, function( li ) {
+			var src = li.querySelector( 'img' ).src;
+			oldMediaList[ src ] = li;
+		});
 	}
 	urls.forEach(function( src ) {
+		// already have this element
+		if ( oldMediaList[ src ]) {
+			delete oldMediaList[ src ];
+			return;
+		}
+
 		var li = document.createElement( 'li' );
 		var button = document.createElement( 'button' );
 		var img = document.createElement( 'img' );
 		img.src = src;
-
-		li.appendChild( button );
-		button.appendChild( img );
-		mediaList.appendChild( li );
+		img.alt = "";
 
 		// initial animation classes
 		li.classList.add( 'hidden', 'fade', 'fade-in', 'thumbnail' );
@@ -40,9 +49,20 @@ function riseVisionStoryPlayer( urls ) {
 		li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
 		li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
 		li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
-	});
-	var mediaElements = mediaList.children;
 
+		// add to DOM
+		button.appendChild( img );
+		li.appendChild( button );
+		mediaList.appendChild( li );
+	});
+	// remove anything left on the old media list
+	Object.keys( oldMediaList ).forEach(function( key ) {
+		oldMediaList[ key ].remove();
+	});
+	// get the new children list
+	var mediaElements = mediaList.children;
+	// cap the mediaIndex
+	mediaIndex = Math.min( mediaIndex, mediaElements.length );
 
 	// render the animation sequence
 	var animationIndex = 0;
