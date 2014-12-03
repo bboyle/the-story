@@ -79,8 +79,16 @@
        * @default false
        */
       isCacheRunning: false,
+      observe: {
+        companyId: 'updateUrlFromAttributes',
+        folder: 'updateUrlFromAttributes',
+        fileName: 'updateUrlFromAttributes'
+      },
+      updateUrlFromAttributes: function() {
+        this.job( 'setUrl', function() { this.setUrl(); }, 100 );
+      },
       ready: function() {
-        this.setUrl();
+        this.updateUrlFromAttributes();
       },
       setUrl: function() {
         var baseUrl = "https://www.googleapis.com/storage/v1/b/risemedialibrary-" + encodeURIComponent(this.companyId) + "/o",
@@ -124,15 +132,6 @@
           }
         }
       },
-      companyIdChanged: function() {
-        this.setUrl();
-      },
-      folderChanged: function() {
-        this.setUrl();
-      },
-      fileNameChanged: function() {
-        this.setUrl();
-      },
       handleStorageResponse: function(e, resp) {
         var self = this,
           urls = [];
@@ -174,7 +173,7 @@
         else {
           this.isCacheRunning = true;
         }
-        // this.go();
+        this.go();
       },
       handlePingError: function(e, resp) {
         console.log("Ping Error: " + resp.xhr.status + " " + resp.xhr.statusText);
