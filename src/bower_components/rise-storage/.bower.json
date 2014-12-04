@@ -1,0 +1,14 @@
+{
+  "name": "rise-storage",
+  "homepage": "https://github.com/Rise-Vision/web-component-rise-storage",
+  "version": "0.1.0",
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.0",
+    "commit": "bbadfd1830baee0378483558a34a1954e186fbff"
+  },
+  "_source": "git://github.com/Rise-Vision/web-component-rise-storage.git",
+  "_target": "~0.1.0",
+  "_originalSource": "rise-storage"
+}

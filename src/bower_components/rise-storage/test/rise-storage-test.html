@@ -1,0 +1,306 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>rise-storage</title>
+
+  <script src="/components/webcomponentsjs/webcomponents.js"></script>
+  <script src="/components/web-component-tester/browser.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="/rise-storage/rise-storage.html">
+</head>
+<body>
+
+  <rise-storage id="storage1"></rise-storage>
+  <rise-storage id="storage2" companyId="abc123"></rise-storage>
+  <rise-storage id="storage3" companyId="abc123" folder="my-folder" folderRefresh="10"></rise-storage>
+  <rise-storage id="storage4" companyId="abc123" fileName="my-image.png" folderRefresh="10"></rise-storage>
+  <rise-storage id="storage5" companyId="abc123" folder="my-folder" fileName="my-image.png"></rise-storage>
+
+  <script>
+    suite("rise-storage", function() {
+      var storage = document.querySelector("#storage1"),
+        storage2 = document.querySelector("#storage2"),
+        storage3 = document.querySelector("#storage3"),
+        storage4 = document.querySelector("#storage4"),
+        storage5 = document.querySelector("#storage5"),
+        xhr, requests;
+
+      suiteSetup(function() {
+        xhr = sinon.useFakeXMLHttpRequest();
+
+        xhr.onCreate = function (xhr) {
+          requests.push(xhr);
+        };
+      });
+
+      suiteTeardown(function() {
+        xhr.restore();
+      });
+
+      setup(function() {
+        requests = [];
+      });
+
+      suite("initialization", function() {
+        test("defaults are correct", function() {
+          assert.equal(storage.companyId, "");
+          assert.equal(storage.folder, "");
+          assert.equal(storage.fileName, "");
+          assert.equal(storage.folderRefresh, 0);
+        });
+
+        test("urls have the expected values", function() {
+          assert.equal(storage.url, "");
+          assert.equal(storage2.url, "https://www.googleapis.com/storage/v1/b/risemedialibrary-abc123/o");
+          assert.equal(storage3.url, "https://www.googleapis.com/storage/v1/b/risemedialibrary-abc123/o?delimiter=/&prefix=my-folder/");
+          assert.equal(storage4.url, "https://www.googleapis.com/storage/v1/b/risemedialibrary-abc123/o/my-image.png");
+          assert.equal(storage5.url, "https://www.googleapis.com/storage/v1/b/risemedialibrary-abc123/o?delimiter=/&prefix=my-folder/my-image.png");
+        });
+      });
+
+      suite("requests", function() {
+        var headers = {
+            "Content-Type": "text/json"
+          },
+          multipleFiles = JSON.stringify({
+            "items": [{
+              "contentType": "image/jpeg",
+              "mediaLink": "https://url.to.my-image.jpg"
+            },
+            {
+              "contentType": "image/gif",
+              "mediaLink": "https://url.to.my-image.gif"
+            },
+            {
+              "contentType": "text/plain",
+              "mediaLink": "https://url.to.my-folder"
+            }]
+          });
+
+        test("should not make a request when there's no companyId", function(done) {
+          storage.addEventListener("rise-storage-response", function(response) {
+          });
+
+          storage.go();
+          assert.equal(requests.length, 0);
+          done();
+        });
+
+        test("should get files in a bucket", function(done) {
+          storage2.addEventListener("rise-storage-response", function(response) {
+            assert.equal(response.detail.length, 2);
+          });
+
+          storage2.go();
+          requests[0].respond(200, headers, multipleFiles);
+          done();
+        });
+
+        test("should get files in a folder", function(done) {
+          storage3.addEventListener("rise-storage-response", function(response) {
+            assert.equal(response.detail.length, 2);
+          });
+
+          storage3.go();
+          requests[0].respond(200, headers, multipleFiles);
+          done();
+        });
+
+        test("should get a specific file in a bucket", function(done) {
+          var singleFile = JSON.stringify({
+            "contentType": "image/jpeg",
+            "mediaLink": "https://url.to.my-image.jpg"
+          });
+
+          storage4.addEventListener("rise-storage-response", function(response) {
+            assert.equal(response.detail.length, 1);
+          });
+
+          storage4.go();
+          requests[0].respond(200, headers, singleFile);
+          done();
+        });
+
+        test("should get a specific file in a folder", function(done) {
+          var singleFile = JSON.stringify({
+            "items": [{
+              "contentType": "image/jpeg",
+              "mediaLink": "https://url.to.my-image.jpg"
+            }]
+          });
+
+          storage5.addEventListener("rise-storage-response", function(response) {
+            assert.equal(response.detail.length, 1);
+          });
+
+          storage5.go();
+          requests[0].respond(200, headers, singleFile);
+          done();
+        });
+
+        suite("rise-storage-response", function() {
+          var responded;
+
+          setup(function() {
+            responded = false;
+          });
+
+          test("should fire rise-storage-response on success", function(done) {
+            storage2.addEventListener("rise-storage-response", function(response) {
+              responded = true;
+            });
+
+            storage2.go();
+            requests[0].respond(200, headers, multipleFiles);
+            assert.isTrue(responded);
+            done();
+          });
+
+          test("should not fire rise-storage-response on failure", function(done) {
+            storage2.addEventListener("rise-storage-response", function(response) {
+              responded = true;
+            });
+
+            storage2.go();
+            requests[0].respond(404, headers, multipleFiles);
+            assert.isFalse(responded);
+            done();
+          });
+        });
+
+        suite("rise-storage-error", function() {
+          var responded;
+
+          setup(function() {
+            responded = false;
+          });
+
+          test("should fire rise-storage-error on failure", function(done) {
+            storage2.addEventListener("rise-storage-error", function(response) {
+              responded = true;
+            });
+
+            storage2.go();
+            requests[0].respond(404, headers, multipleFiles);
+            assert.isTrue(responded);
+            done();
+          });
+
+          test("should not fire rise-storage-error on success", function(done) {
+            storage2.addEventListener("rise-storage-error", function(response) {
+              responded = true;
+            });
+
+            storage2.go();
+            requests[0].respond(200, headers, multipleFiles);
+            assert.isFalse(responded);
+            done();
+          });
+        });
+      });
+
+      suite("refresh", function() {
+        var clock;
+
+        suiteSetup(function() {
+          clock = sinon.useFakeTimers();
+        });
+
+        suiteTeardown(function() {
+          clock.restore();
+        });
+
+        test("should check for changes to a folder", function() {
+          var spy = sinon.spy(storage3, "go");
+
+          storage3.startTimer();
+          clock.tick(9999);
+          assert(spy.notCalled);
+
+          clock.tick(1);
+          assert(spy.calledOnce);
+        });
+
+        test("should not check for changes to a file", function() {
+          var spy = sinon.spy(storage4, "go");
+
+          storage4.startTimer(spy);
+          clock.tick(10000);
+          assert(spy.notCalled);
+        });
+      });
+
+      suite("triggers", function() {
+        test("should trigger request when companyId changed", function(done) {
+          async.series([
+            function(cb) {
+              storage.companyId = "my-companyId";
+              cb();
+            },
+            flush,
+            function(cb) {
+              requestAnimationFrame(function() {
+                cb();
+              });
+            },
+            function(cb) {
+              assert.equal(requests.length, 1);
+              cb();
+            }
+            ], done);
+        });
+
+        test("should trigger request when folder changed", function(done) {
+          async.series([
+            function(cb) {
+              storage.folder = "new-folder";
+              cb();
+            },
+            flush,
+            function(cb) {
+              requestAnimationFrame(function() {
+                cb();
+              });
+            },
+            function(cb) {
+              assert.equal(requests.length, 1);
+              cb();
+            }
+            ], done);
+        });
+
+        test("should trigger request when fileName changed", function(done) {
+          async.series([
+            function(cb) {
+              storage.fileName = "new-fileName";
+              cb();
+            },
+            flush,
+            function(cb) {
+              requestAnimationFrame(function() {
+                cb();
+              });
+            },
+            function(cb) {
+              assert.equal(requests.length, 1);
+              cb();
+            }
+            ], done);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
