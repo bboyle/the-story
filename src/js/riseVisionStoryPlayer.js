@@ -4,23 +4,23 @@
 
 	var player = {};
 	var playing = false;
+	var paused = false;
+	var pausedTimeout = 3000;
+
+	var sequence = [
+		{ duration:  100, on: 'thumbnail',         off: 'fade-in hidden'    },
+		{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
+		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
+		{ duration:  700, on: 'fade-in thumbnail', off: 'full'              },
+	];
+	var sequencePauseIndex = 1;
 
 
 	function riseVisionStoryPlayer() {
 
 		var mediaElements;
 		var mediaIndex = 0;
-
-		var sequence = [
-			{ duration:  100, on: 'thumbnail',         off: 'fade-in hidden'    },
-			{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
-			{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
-			{ duration:  700, on: 'fade-in thumbnail', off: 'full'              },
-		];
-		var sequencePauseIndex = 1;
-
-		playing = playing || false;
-		var pausedTimeout = 3000;
+		var animationIndex = 0;
 
 
 		// got file list from storage
@@ -39,6 +39,9 @@
 					oldMediaList[ src ] = li;
 				});
 			}
+
+			var newItems = [];
+
 			urls.forEach(function( src ) {
 				// already have this element
 				if ( oldMediaList[ src ]) {
@@ -63,44 +66,52 @@
 				// add to DOM
 				button.appendChild( img );
 				li.appendChild( button );
-				mediaList.appendChild( li );
+				newItems.push( li );
 			});
 
-			// pause for update
-			pause();
+			// stop playing
+			stop();
 
 			// remove anything left on the old media list
 			Object.keys( oldMediaList ).forEach(function( key ) {
 				oldMediaList[ key ].remove();
 			});
-			// get the new children list
-			mediaElements = mediaList.children;
-			// cap the mediaIndex
-			mediaIndex = Math.min( mediaIndex, mediaElements.length );
+			// add new media
+			newItems.forEach(function( li ) {
+				mediaList.appendChild( li );
+			});
 
+			// get the new children list
+			if ( ! mediaElements ) {
+				mediaElements = mediaList.children;
+			}
+
+			// go
+			mediaIndex = Math.floor( Math.random() * mediaElements.length );
 			play();
 		});
 
 
+		// set animation state
+		function setAnimationState( element, classObject ) {
+			DOMTokenList.prototype.add.apply( element.classList, classObject.on.split( ' ' ));
+			DOMTokenList.prototype.remove.apply( element.classList, classObject.off.split( ' ' ));
+		}
+
+
 		// render the animation sequence
-		var animationIndex = 0;
 		var then = Date.now();
 		function animateSequence() {
 			var now = Date.now();
 
-			if ( mediaElements.length === 0 ) {
+			if ( mediaElements.length < mediaIndex ) {
 				return;
 			}
 
 			// time to update?
 			if ( now - then >= sequence[ animationIndex ].duration ) {
 				// update classes
-				sequence[ animationIndex ].on.split( ' ' ).forEach(function( newClass ) {
-					mediaElements[ mediaIndex ].classList.add( newClass );
-				});
-				sequence[ animationIndex ].off.split( ' ' ).forEach(function( oldClass ) {
-					mediaElements[ mediaIndex ].classList.remove(  oldClass );
-				});
+				setAnimationState( mediaElements[ mediaIndex ], sequence[ animationIndex ]);
 
 				// next in sequence
 				then = now;
@@ -113,23 +124,25 @@
 			}
 
 			// paused?
-			if ( ! playing ) {
+			if ( paused ) {
 				// set pause duration
 				then += pausedTimeout;
-				playing = true;
+				paused = false;
 			}
 
 			// loop
-			requestAnimationFrame( animateSequence );
+			if ( playing ) {
+				requestAnimationFrame( animateSequence );
+			}
 		}
 
 
 		// pause the slideshow
 		function pause() {
-			if ( playing ) {
+			if ( ! paused ) {
 				animationIndex = sequencePauseIndex;
-				then = Date.now() - sequence[ sequencePauseIndex ].duration;
-				playing = false;
+				paused = true;
+				then = 0; // triggers animation to run
 			}
 			return player;
 		}
@@ -137,8 +150,9 @@
 		// play
 		function play() {
 			then = Math.min( then, Date.now() );
-			if ( ! playing ) {
+			if ( ! playing || paused ) {
 				playing = true;
+				paused = false;
 				requestAnimationFrame( animateSequence );
 			}
 
@@ -152,6 +166,21 @@
 			} else {
 				play();
 			}
+		}
+
+		// stop
+		function stop() {
+			if ( playing ) {
+				playing = false;
+				paused = false;
+				animationIndex = sequence.length - 1;
+				// finish current element
+				setAnimationState( mediaElements[ mediaIndex ], sequence[ animationIndex ]);
+
+				// reset for new item
+				mediaIndex = Math.floor( Math.random() * mediaElements.length );
+			}
+			return player;
 		}
 
 
@@ -170,18 +199,16 @@
 			// selected active item
 			if ( i === mediaIndex ) {
 				// just pause
-				pause();
+				if ( ! playing ) {
+					play();
+				} else {
+					pause();
+				}
 
 			} else if ( i < mediaElements.length ) {
 				pause();
-				// TODO DRY: apply animation
 				// finish current element
-				sequence[ sequence.length - 1 ].on.split( ' ' ).forEach(function( newClass ) {
-					mediaElements[ mediaIndex ].classList.add( newClass );
-				});
-				sequence[ sequence.length - 1 ].off.split( ' ' ).forEach(function( oldClass ) {
-					mediaElements[ mediaIndex ].classList.remove(  oldClass );
-				});
+				setAnimationState( mediaElements[ mediaIndex ], sequence[ sequence.length - 1 ]);
 
 				// select new element
 				mediaIndex = i;
@@ -200,7 +227,8 @@
 		player = {
 			pause: pause,
 			play: play,
-			playPause: playToggle
+			playPause: playToggle,
+			stop: stop
 		};
 		return player;
 	}
@@ -210,4 +238,3 @@
 	window.riseVisionStoryPlayer = riseVisionStoryPlayer;
 
 }());
-

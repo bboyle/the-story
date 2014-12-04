@@ -25,13 +25,9 @@
 	<script src="js/viewportSize.js"></script>
 	<script src="js/riseVisionStoryPlayer.js"></script>
 	<script>
-		window.addEventListener( 'polymer-ready', function( e ) {
-			'use strict';
-
-			// start the player
-			riseVisionStoryPlayer();
-
-			// request files from storage
+		var player;
+		window.addEventListener( 'polymer-ready', function() {
+			player = riseVisionStoryPlayer();
 			document.querySelector( 'rise-storage' ).go();
 		});
 	</script>
