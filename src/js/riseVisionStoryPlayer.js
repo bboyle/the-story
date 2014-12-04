@@ -6,7 +6,7 @@
 	var playing = false;
 
 
-	function riseVisionStoryPlayer( urls ) {
+	function riseVisionStoryPlayer() {
 
 		var mediaElements;
 		var mediaIndex = 0;
@@ -23,58 +23,74 @@
 		var pausedTimeout = 3000;
 
 
-		// setup DOM
-		var mediaList = document.querySelector( 'main > ul' );
-		var oldMediaList = {};
-		if ( ! mediaList ) {
-			mediaList = document.createElement( 'ul' );
-			document.querySelector( 'main' ).appendChild( mediaList );
-		} else {
-			Array.prototype.forEach.call( mediaList.children, function( li ) {
-				var src = li.querySelector( 'img' ).src;
-				oldMediaList[ src ] = li;
-			});
-		}
-		urls.forEach(function( src ) {
-			// already have this element
-			if ( oldMediaList[ src ]) {
-				delete oldMediaList[ src ];
-				return;
+		// got file list from storage
+		document.querySelector( 'rise-storage' ).addEventListener( 'rise-storage-response', function( e ) {
+			var urls = e.detail;
+
+			// setup DOM
+			var mediaList = document.querySelector( 'main > ul' );
+			var oldMediaList = {};
+			if ( ! mediaList ) {
+				mediaList = document.createElement( 'ul' );
+				document.querySelector( 'main' ).appendChild( mediaList );
+			} else {
+				Array.prototype.forEach.call( mediaList.children, function( li ) {
+					var src = li.querySelector( 'img' ).src;
+					oldMediaList[ src ] = li;
+				});
 			}
+			urls.forEach(function( src ) {
+				// already have this element
+				if ( oldMediaList[ src ]) {
+					delete oldMediaList[ src ];
+					return;
+				}
 
-			var li = document.createElement( 'li' );
-			var button = document.createElement( 'button' );
-			var img = document.createElement( 'img' );
-			img.src = src;
-			img.alt = "";
+				var li = document.createElement( 'li' );
+				var button = document.createElement( 'button' );
+				var img = document.createElement( 'img' );
+				img.src = src;
+				img.alt = "";
 
-			// initial animation classes
-			li.classList.add( 'hidden', 'fade', 'fade-in', 'thumbnail' );
+				// initial animation classes
+				li.classList.add( 'hidden', 'fade', 'fade-in', 'thumbnail' );
 
-			// randomly position
-			li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
-			li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
-			li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
+				// randomly position
+				li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
+				li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
+				li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
 
-			// add to DOM
-			button.appendChild( img );
-			li.appendChild( button );
-			mediaList.appendChild( li );
+				// add to DOM
+				button.appendChild( img );
+				li.appendChild( button );
+				mediaList.appendChild( li );
+			});
+
+			// pause for update
+			pause();
+
+			// remove anything left on the old media list
+			Object.keys( oldMediaList ).forEach(function( key ) {
+				oldMediaList[ key ].remove();
+			});
+			// get the new children list
+			mediaElements = mediaList.children;
+			// cap the mediaIndex
+			mediaIndex = Math.min( mediaIndex, mediaElements.length );
+
+			play();
 		});
-		// remove anything left on the old media list
-		Object.keys( oldMediaList ).forEach(function( key ) {
-			oldMediaList[ key ].remove();
-		});
-		// get the new children list
-		var mediaElements = mediaList.children;
-		// cap the mediaIndex
-		mediaIndex = Math.min( mediaIndex, mediaElements.length );
+
 
 		// render the animation sequence
 		var animationIndex = 0;
 		var then = Date.now();
 		function animateSequence() {
 			var now = Date.now();
+
+			if ( mediaElements.length === 0 ) {
+				return;
+			}
 
 			// time to update?
 			if ( now - then >= sequence[ animationIndex ].duration ) {
@@ -177,7 +193,7 @@
 
 
 		// select media item on click
-		document.getElementsByTagName( 'main' )[ 0 ].addEventListener( 'click', playerClick );
+		document.querySelector( 'main' ).addEventListener( 'click', playerClick );
 
 
 		// return API

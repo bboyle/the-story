@@ -27,16 +27,12 @@
 	<script>
 		window.addEventListener( 'polymer-ready', function( e ) {
 			'use strict';
-			var storage = document.querySelector( 'rise-storage' );
 
-			// got file list from storage
-			storage.addEventListener( 'rise-storage-response', function( e ) {
-				// update/start the player
-				riseVisionStoryPlayer( e.detail ).play();
-			});
+			// start the player
+			riseVisionStoryPlayer();
 
 			// request files from storage
-			storage.go();
+			document.querySelector( 'rise-storage' ).go();
 		});
 	</script>
 </body>
