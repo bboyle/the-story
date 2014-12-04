@@ -60,3 +60,15 @@ button:hover,
 button:focus {
 	outline: 2px solid yellow;
 }
+
+
+button#switch {
+	position: fixed;
+	width: auto;
+	height: auto;
+	top: 1em;
+	left: 1em;
+	padding: 1em;
+	color: #fafafa;
+	border: 1px solid #777;
+}

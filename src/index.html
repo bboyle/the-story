@@ -21,6 +21,7 @@
 		</rise-storage>
 	</main>
 
+	<button id="switch">Switch folders</button>
 
 	<script src="js/viewportSize.js"></script>
 	<script src="js/riseVisionStoryPlayer.js"></script>
@@ -29,6 +30,14 @@
 		window.addEventListener( 'polymer-ready', function() {
 			player = riseVisionStoryPlayer();
 			document.querySelector( 'rise-storage' ).go();
+		});
+
+
+		var folders = [ 'the-story', 'refresh' ];
+		folderIndex = 0;
+		document.querySelector( '#switch' ).addEventListener( 'click', function() {
+			folderIndex = ++folderIndex % folders.length;
+			document.querySelector( 'rise-storage' ).setAttribute( 'folder', folders[ folderIndex ]);
 		});
 	</script>
 </body>
