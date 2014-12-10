@@ -6,12 +6,13 @@
 	var playing = false;
 	var paused = false;
 	var pausedTimeout = 3000;
+	var zindex = 1;
 
 	var sequence = [
-		{ duration:  100, on: 'thumbnail',         off: 'fade-in hidden'    },
+		{ duration:  100, on: 'thumbnail focus',   off: 'fade-in hidden'    },
 		{ duration:  750, on: 'full',              off: 'thumbnail fade-in' },
-		{ duration: 3500, on: 'fade-in thumbnail', off: 'full'              },
-		{ duration:  700, on: 'fade-in thumbnail', off: 'full'              },
+		{ duration: 3500, on: 'fade-in thumbnail', off: 'full focus'        },
+		{ duration:  700, on: 'fade-in thumbnail', off: 'full focus'        },
 	];
 	var sequencePauseIndex = 1;
 
@@ -50,6 +51,7 @@
 				}
 
 				var li = document.createElement( 'li' );
+				var figure = document.createElement( 'figure' );
 				var button = document.createElement( 'button' );
 				var img = document.createElement( 'img' );
 				img.src = src;
@@ -61,12 +63,12 @@
 				// randomly position
 				li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
 				li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
-				li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 60 ) - 30 + 360 ) + 'deg)';
+				li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 42 ) - 21 ) + 'deg)';
 
 				// add to DOM
 				button.appendChild( img );
-				button.classList.add( 'picture' );
-				li.appendChild( button );
+				figure.appendChild( button );
+				li.appendChild( figure );
 				newItems.push( li );
 			});
 
@@ -88,7 +90,9 @@
 			}
 
 			// go
+			zindex = 1;
 			mediaIndex = Math.floor( Math.random() * mediaElements.length );
+			mediaElements[ mediaIndex ].style.zIndex = ++zindex;
 			play();
 		});
 
@@ -121,6 +125,7 @@
 				// prepare next image
 				if ( animationIndex === 0 ) {
 					mediaIndex = Math.floor( Math.random() * mediaElements.length );
+					mediaElements[ mediaIndex ].style.zIndex = ++zindex;
 				}
 			}
 

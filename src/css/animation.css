@@ -7,9 +7,11 @@
 .fade-in {
 	opacity: 1;
 }
+/*
 .hidden {
 	outline: 1px dashed rgba( 255, 255, 255, 0.3 );
 }
+*/
 .hidden * {
 	opacity: 0;
 }
@@ -21,8 +23,8 @@ img {
 /* sizing */
 
 .thumbnail {
-	max-width: 150px;
-	max-height: 150px;
+	max-width: 38.2vmin;
+	max-height: 38.2vmin;
 
 	transition: all .3s ease-in;
 }
@@ -33,9 +35,8 @@ img {
 	left: 0 !important;
 	right: 0 !important;
 	transform: rotate(0) !important;
-	max-width: 75%;
-	max-height: 75%;
-	z-index: 2;
+	max-width: 85.4vmin;
+	max-height: 85.4vmin;
 
 	transition:
 		max-width .7s cubic-bezier(.35,-0.33,.57,1.28),
@@ -45,4 +46,14 @@ img {
 		left .5s cubic-bezier(.65,1.36,.94,1.09),
 		right .5s cubic-bezier(.65,1.36,.94,1.09),
 		rotate .3s ease-out;
+}
+
+figure {
+	transition: box-shadow .7s ease;
+}
+.thumbnail figure {
+	box-shadow: .3em .3em .7em rgba( 0, 0, 0, 0.5 );
+}
+.full figure {
+	box-shadow: 1em 1em 1.5em rgba( 0, 0, 0, 0.8 );
 }
