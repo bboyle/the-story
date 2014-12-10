@@ -196,7 +196,7 @@
 			var i = 0;
 
 			// find LI ancestor
-			while ( /^BUTTON|IMG$/i.test( item.tagName ) && item.parentNode ) {
+			while ( /^BUTTON|FIGURE|IMG$/i.test( item.tagName ) && item.parentNode ) {
 				item = item.parentNode;
 			}
 			// is it a media element? find it
@@ -218,6 +218,7 @@
 
 				// select new element
 				mediaIndex = i;
+				mediaElements[ mediaIndex ].style.zIndex = ++zindex;
 				// reset animation
 				animationIndex = 0;
 				play();
