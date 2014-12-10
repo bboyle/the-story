@@ -5,7 +5,7 @@
 	transition: opacity .3s ease-in;
 }
 .fade-in {
-	opacity: .2;
+	opacity: 1;
 }
 .hidden {
 	outline: 1px dashed rgba( 255, 255, 255, 0.3 );

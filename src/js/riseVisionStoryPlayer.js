@@ -65,6 +65,7 @@
 
 				// add to DOM
 				button.appendChild( img );
+				button.classList.add( 'picture' );
 				li.appendChild( button );
 				newItems.push( li );
 			});
