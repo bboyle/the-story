@@ -61,7 +61,7 @@
 				// randomly position
 				li.style.left = ( Math.floor( Math.random() * window.innerWidth ) - ( window.innerWidth / 2 )) + 'px';
 				li.style.top = ( Math.floor( Math.random() * window.innerHeight ) - ( window.innerHeight / 2 )) + 'px';
-				li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 90 ) - 45 + 360 ) + 'deg)';
+				li.style.transform = 'rotate(' + ( Math.floor( Math.random() * 60 ) - 30 + 360 ) + 'deg)';
 
 				// add to DOM
 				button.appendChild( img );
