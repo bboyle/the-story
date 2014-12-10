@@ -11,17 +11,25 @@
 </head>
 <body>
 
+	<h1>
+		Let me tell you about
+		<select id="folder">
+			<option value="the-story/birds">birds</option>
+			<option value="the-story/baseball">baseball</option>
+			<option value="refresh">Stu</option>
+			<option value="the-story">sci-fi</option>
+		</select>
+	</h1>
 
 	<main role="main">
 
 		<rise-storage
 			companyId="76ef5f8c-cd7b-4041-bff2-728a81366d12"
-			folder="the-story"
+			folder="the-story/birds"
 			folderRefresh="60">
 		</rise-storage>
-	</main>
 
-	<button id="switch">Switch folders</button>
+	</main>
 
 	<script src="js/viewportSize.js"></script>
 	<script src="js/riseVisionStoryPlayer.js"></script>
@@ -33,11 +41,8 @@
 		});
 
 
-		var folders = [ 'the-story', 'refresh' ];
-		folderIndex = 0;
-		document.querySelector( '#switch' ).addEventListener( 'click', function() {
-			folderIndex = ++folderIndex % folders.length;
-			document.querySelector( 'rise-storage' ).setAttribute( 'folder', folders[ folderIndex ]);
+		document.querySelector( '#folder' ).addEventListener( 'change', function( event ) {
+			document.querySelector( 'rise-storage' ).setAttribute( 'folder', event.target.value );
 		});
 	</script>
 </body>
