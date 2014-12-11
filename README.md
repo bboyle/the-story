@@ -23,6 +23,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 For convenience, dependencies are included in this repository. If you wish to manage dependencies with package manager tools:
 
 - install node and npm package manager
+- install gulp build tool: `npm install -g gulp`
 - install bower package manager: `npm install -g bower`
 - install dependencies using: `bower install`
 
@@ -33,7 +34,10 @@ For convenience, dependencies are included in this repository. If you wish to ma
 ### Dependencies
 
 - internet connection for loading media
-- [rise-storage web component](https://github.com/Rise-Vision/web-component-rise-storage) (packaged in this repository)
+- front-end dependencies (packaged in with this repo)
+  - [rise-storage web component](https://github.com/Rise-Vision/web-component-rise-storage)
+  - [knuth-shuffle](https://github.com/coolaj86/knuth-shuffle)
+- development dependencies (gulp and plugins): install using `npm install`
 
 ### Testing
 
