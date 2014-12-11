@@ -123,10 +123,13 @@
           playQueue[ i ].style.zIndex = ++zindex;
         }
         // put hidden items first
+        knuthShuffle(unseenItemsInQueue);
+        knuthShuffle(playQueue);
         playQueue = unseenItemsInQueue.concat(playQueue);
+      } else {
+        // shuffle the order
+        knuthShuffle(playQueue);
       }
-      // shuffle the order
-      knuthShuffle(playQueue);
 
       // shuffle onscreen positions
       playQueue.forEach(function(li) {
