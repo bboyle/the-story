@@ -1,21 +1,21 @@
 (function(window, document) {
-	"use strict";
+  "use strict";
 
 
-	var bodyStyle = document.body.style;
+  var bodyStyle = document.body.style;
 
 
-	// set body to size of viewport
-	function scaleBodyToFitWindow() {
-		bodyStyle.height = window.innerHeight + "px";
-	}
+  // set body to size of viewport
+  function scaleBodyToFitWindow() {
+    bodyStyle.height = window.innerHeight + "px";
+  }
 
 
-	// onresize
-	window.addEventListener("resize", scaleBodyToFitWindow);
+  // onresize
+  window.addEventListener("resize", scaleBodyToFitWindow);
 
-	// immediately
-	scaleBodyToFitWindow();
+  // immediately
+  scaleBodyToFitWindow();
 
 
 }(window, document));
