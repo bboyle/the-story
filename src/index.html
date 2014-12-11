@@ -31,18 +31,20 @@
 
 	</main>
 
+	<script src="bower_components/knuth-shuffle/index.js"></script>
 	<script src="js/viewportSize.js"></script>
 	<script src="js/riseVisionStoryPlayer.js"></script>
 	<script>
+
 		var player;
-		window.addEventListener( 'polymer-ready', function() {
-			player = riseVisionStoryPlayer();
-			document.querySelector( 'rise-storage' ).go();
+		window.addEventListener("polymer-ready", function() {
+			player = window.riseVisionStoryPlayer();
+			document.querySelector("rise-storage").go();
 		});
 
 
-		document.querySelector( '#folder' ).addEventListener( 'change', function( event ) {
-			document.querySelector( 'rise-storage' ).setAttribute( 'folder', event.target.value );
+		document.querySelector("#folder").addEventListener("change", function(event) {
+			document.querySelector("rise-storage").setAttribute("folder", event.target.value);
 		});
 	</script>
 </body>

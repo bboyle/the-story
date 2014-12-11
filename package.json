@@ -1,0 +1,25 @@
+{
+  "name": "the-story",
+  "version": "0.0.0",
+  "description": "Visual presentation of data (like pictures on a coffee table)",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jshint": "^1.9.0",
+    "jshint-stylish": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rise-Vision/the-story.git"
+  },
+  "author": "Rise Vision",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/Rise-Vision/the-story/issues"
+  },
+  "homepage": "https://github.com/Rise-Vision/the-story"
+}
