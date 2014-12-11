@@ -22,7 +22,7 @@
 
   function riseVisionStoryPlayer() {
 
-    var mediaElements;
+    var playQueue;
     var mediaIndex = 0;
     var animationIndex = 0;
 
@@ -83,8 +83,8 @@
       });
 
       // get the new children list
-      mediaElements = Array.prototype.slice.call(mediaList.children);
-      shuffleMedia();
+      playQueue = Array.prototype.slice.call(mediaList.children);
+      shuffleQueue();
 
       // go
       animationIndex = 0;
@@ -109,27 +109,27 @@
 
 
     // shuffle items for playback
-    function shuffleMedia() {
-      var hiddenItems = mediaElements.filter(isHidden);
+    function shuffleQueue() {
+      var unseenItemsInQueue = playQueue.filter(isHidden);
 
       zindex = MIN_Z_INDEX;
 
-      if (hiddenItems.length) {
-        mediaElements = mediaElements.filter(function(item) {
-          return hiddenItems.indexOf(item) === -1;
+      if (unseenItemsInQueue.length) {
+        playQueue = playQueue.filter(function(item) {
+          return unseenItemsInQueue.indexOf(item) === -1;
         });
         // reset zindex
-        for (var i = 0; i < mediaElements.length; i++) {
-          mediaElements[ i ].style.zIndex = ++zindex;
+        for (var i = 0; i < playQueue.length; i++) {
+          playQueue[ i ].style.zIndex = ++zindex;
         }
         // put hidden items first
-        mediaElements = hiddenItems.concat(mediaElements);
+        playQueue = unseenItemsInQueue.concat(playQueue);
       }
       // shuffle the order
-      knuthShuffle(mediaElements);
+      knuthShuffle(playQueue);
 
       // shuffle onscreen positions
-      mediaElements.forEach(function(li) {
+      playQueue.forEach(function(li) {
         // randomly position
         li.style.left = (Math.floor(Math.random() * window.innerWidth) - (window.innerWidth / 2)) + "px";
         li.style.top = (Math.floor(Math.random() * window.innerHeight) - (window.innerHeight / 2)) + "px";
@@ -137,7 +137,7 @@
       });
 
       // reset
-      mediaElements.forEach(setStyle({ "z-index": 1 }));
+      playQueue.forEach(setStyle({ "z-index": 1 }));
       mediaIndex = 0;
     }
 
@@ -155,19 +155,19 @@
       var now = Date.now();
 
       // time to update?
-      if (now - then >= sequence[ animationIndex ].duration) {
-        if (mediaIndex >= mediaElements.length) {
-          if (mediaElements.length === 0) {
+      if (playing && now - then >= sequence[ animationIndex ].duration) {
+        if (mediaIndex >= playQueue.length) {
+          if (playQueue.length === 0) {
             return;
           }
-          shuffleMedia();
+          shuffleQueue();
         }
 
         // update classes
         if (animationIndex === 0) {
-          mediaElements[ mediaIndex ].style.zIndex = ++zindex;
+          playQueue[ mediaIndex ].style.zIndex = ++zindex;
         }
-        setAnimationState(mediaElements[ mediaIndex ], sequence[ animationIndex ]);
+        setAnimationState(playQueue[ mediaIndex ], sequence[ animationIndex ]);
 
         // next in sequence
         then = now;
@@ -231,10 +231,7 @@
         paused = false;
         animationIndex = sequence.length - 1;
         // finish current element
-        setAnimationState(mediaElements[ mediaIndex ], sequence[ animationIndex ]);
-
-        // reset for new item
-        mediaIndex = Math.floor(Math.random() * mediaElements.length);
+        setAnimationState(playQueue[ mediaIndex ], sequence[ animationIndex ]);
       }
       return player;
     }
@@ -242,15 +239,17 @@
 
     // click on media
     function playerClick(event) {
+      event.stopImmediatePropagation();
+
       var item = event.target;
-      var selectedIndex;
+      var selectedIndex, selectedItem, upcoming;
 
       // find LI ancestor
       while (/^BUTTON|FIGURE|IMG$/i.test(item.tagName) && item.parentNode) {
         item = item.parentNode;
       }
       // is it a media element? find it
-      selectedIndex = mediaElements.indexOf(item);
+      selectedIndex = playQueue.indexOf(item);
 
       // selected active item
       if (selectedIndex === mediaIndex) {
@@ -261,14 +260,17 @@
           pause();
         }
 
-      } else if (selectedIndex < mediaElements.length) {
-        pause();
-        // finish current element
-        setAnimationState(mediaElements[ mediaIndex ], sequence[ sequence.length - 1 ]);
+      } else if (selectedIndex < playQueue.length) {
+        stop();
+        upcoming = selectedIndex > mediaIndex;
 
-        // select new element
-        mediaIndex = selectedIndex;
-        mediaElements[ mediaIndex ].style.zIndex = ++zindex;
+        // move to next play position
+        selectedItem = playQueue.splice(selectedIndex, 1)[0];
+        if (upcoming) {
+          mediaIndex++;
+        }
+        playQueue.splice(mediaIndex, 0, selectedItem);
+
         // reset animation
         animationIndex = 0;
         play();
