@@ -10,7 +10,7 @@
 </head>
 <body unresolved>
 
-  <rise-storage companyId="f5d57a6d-0a59-4610-89ae-b40093f7762d" folder="Test" fileName="Brooke.jpg"></rise-storage>
+  <rise-storage companyId="2c6e1f58-75b3-4792-b213-8482476cfa2e" folder="Demo" fileName="balloon.jpeg"></rise-storage>
   <img id="storage-image" src="" />
 
   <script>
@@ -19,6 +19,10 @@
 
     storage.addEventListener("rise-storage-response", function(e) {
       image.setAttribute("src", e.detail[0]);
+    });
+
+    window.addEventListener("polymer-ready", function() {
+      storage.go();
     });
   </script>
 
