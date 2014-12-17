@@ -44,7 +44,10 @@
 
 
     document.querySelector("#folder").addEventListener("change", function(event) {
-      document.querySelector("rise-storage").setAttribute("folder", event.target.value);
+      var storage = document.querySelector("rise-storage");
+      storage.setAttribute("folder", event.target.value);
+      storage.setUrl();
+      storage.go();
     });
   </script>
 </body>
