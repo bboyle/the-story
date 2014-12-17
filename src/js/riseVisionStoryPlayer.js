@@ -39,7 +39,7 @@
       } else {
         Array.prototype.forEach.call(mediaList.children, function(li) {
           var src = li.querySelector("img").src;
-          oldMediaList[ src ] = li;
+          oldMediaList[src] = li;
         });
       }
 
@@ -47,8 +47,8 @@
 
       urls.forEach(function(src) {
         // already have this element
-        if (oldMediaList[ src ]) {
-          delete oldMediaList[ src ];
+        if (oldMediaList[src]) {
+          delete oldMediaList[src];
           return;
         }
 
@@ -74,7 +74,7 @@
 
       // remove anything left on the old media list
       Object.keys(oldMediaList).forEach(function(key) {
-        oldMediaList[ key ].remove();
+        oldMediaList[key].remove();
       });
 
       // add new media
@@ -102,7 +102,7 @@
     function setStyle(styleMap) {
       return function(domElement) {
         Object.keys(styleMap).forEach(function(prop) {
-          domElement.style[ prop ] = styleMap[ prop ];
+          domElement.style[prop] = styleMap[prop];
         });
       };
     }
@@ -120,7 +120,7 @@
         });
         // reset zindex
         for (var i = 0; i < playQueue.length; i++) {
-          playQueue[ i ].style.zIndex = ++zindex;
+          playQueue[i].style.zIndex = ++zindex;
         }
         // put hidden items first
         knuthShuffle(unseenItemsInQueue);
@@ -158,7 +158,7 @@
       var now = Date.now();
 
       // time to update?
-      if (playing && now - then >= sequence[ animationIndex ].duration) {
+      if (playing && now - then >= sequence[animationIndex].duration) {
         if (mediaIndex >= playQueue.length) {
           if (playQueue.length === 0) {
             return;
@@ -168,9 +168,9 @@
 
         // update classes
         if (animationIndex === 0) {
-          playQueue[ mediaIndex ].style.zIndex = ++zindex;
+          playQueue[mediaIndex].style.zIndex = ++zindex;
         }
-        setAnimationState(playQueue[ mediaIndex ], sequence[ animationIndex ]);
+        setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
 
         // next in sequence
         then = now;
@@ -234,7 +234,7 @@
         paused = false;
         animationIndex = sequence.length - 1;
         // finish current element
-        setAnimationState(playQueue[ mediaIndex ], sequence[ animationIndex ]);
+        setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
       }
       return player;
     }
