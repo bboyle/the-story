@@ -1,9 +1,42 @@
-present-data API
-================
+rise-story web component
+========================
 
 ## Introduction
 
 A visual presentation of data. Thumbnails (representing data) are randomly looped in an automated slideshow. The slideshow can be paused by the user. Animations are used for a more compelling experience.
+
+**TODO screenshot**
+
+```html
+<rise-story companyId="UUID" folder="foo" refresh="60" />
+<!-- omit @refresh to never refresh. minimum of 15 -->
+```
+
+```js
+document.querySelector("rise-story").loadMedia();
+document.querySelector("rise-story").play();
+document.querySelector("rise-story").pause();
+document.querySelector("rise-story").pauseToggle();
+document.querySelector("rise-story").stop();
+document.querySelector("rise-story").shuffle();
+
+// what about rise-storage API access?
+document.querySelector("rise-story").getStorageComponent();
+
+// preset (will ever be configurable?)
+document.querySelector("rise-story").autoplay = true;
+document.querySelector("rise-story").onclick("pauseToggle");
+```
+
+To replace media:
+
+```js
+var storyPlayer = document.querySelector("rise-story");
+storyPlayer.setAttribute("folder","bar");
+// will reload instantly? when it rise-storage.go() called?
+storyPlayer.loadMedia(); // shuffle implied
+storyPlayer.play();
+
 
 ## Loading the media player
 
