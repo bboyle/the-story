@@ -7,97 +7,55 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 
 **TODO screenshot**
 
+## Markup
+
+First you must import the web component:
+
 ```html
-<rise-story companyId="UUID" folder="foo" refresh="60" />
-<!-- omit @refresh to never refresh. minimum of 15 -->
+<link rel="import" href="rise-story.html">
 ```
 
+Then place the custom element in the page where you would like the story player to render:
+
+```html
+<rise-story companyId="UUID" folder="foo" refresh="60" />
+```
+
+### Attributes
+
+- companyId **required** - UUID of your company, used to access media from rise-storage
+- folder **required** - name of folder in rise-storage to load media from
+- refresh *optional* - timeout (in minutes) before checking rise-storage for changes to media (minimum `15`). Omit this attribute to disable automatic refresh. (You can still manually refresh using the API commands below.)
+
+### API methods
+
 ```js
-document.querySelector("rise-story").loadMedia();
+// starts the slideshow playing
 document.querySelector("rise-story").play();
+
+// pauses playback (play will automatically resume after a few seconds)
 document.querySelector("rise-story").pause();
-document.querySelector("rise-story").pauseToggle();
+
+// stops playback (use .play() to resume)
 document.querySelector("rise-story").stop();
+
+// switches between play and pause states
+document.querySelector("rise-story").pauseToggle();
+
+// recalculates the random layout of thumbnails and playback order
 document.querySelector("rise-story").shuffle();
+
+// clears screen and starts playback
+document.querySelector("rise-story").reset();
 
 // what about rise-storage API access?
 document.querySelector("rise-story").getStorageComponent();
 
-// preset (will ever be configurable?)
-document.querySelector("rise-story").autoplay = true;
-document.querySelector("rise-story").onclick("pauseToggle");
+// changes media location (inherited from rise storage)
+document.querySelector("rise-story").setAttribute("companyId", UUID);
+document.querySelector("rise-story").setAttribute("folder", folderName);
+
+// load media after changing media location (inherited from rise-storage)
+document.querySelector("rise-story").go();
 ```
 
-To replace media:
-
-```js
-var storyPlayer = document.querySelector("rise-story");
-storyPlayer.setAttribute("folder","bar");
-// will reload instantly? when it rise-storage.go() called?
-storyPlayer.loadMedia(); // shuffle implied
-storyPlayer.play();
-
-
-## Loading the media player
-
-Load these CSS in your `<head>`:
-
-```html
-    <link rel="stylesheet" href="css/init.css">
-    <link rel="stylesheet" href="css/animation.css">
-```
-
-In the body of your page, add a media container:
-
-```html
-    <main role="main">
-        <ul>
-            <li><button><img src="http://farm4.staticflickr.com/3829/9416063008_279161b050_b.jpg" alt="Test image"></button></li>
-            <li><button><img src="http://farm8.staticflickr.com/7310/9419710875_8ba16c9ca9_b.jpg" alt="Test image"></button></li>
-            …
-        </ul>
-    </main>
-```
-
-Load these scripts at the end of your page (before closing `</body>` tag):
-
-```html
-    <script src="js/viewportSize.js"></script>
-    <script src="js/animationSequence.js"></script>
-```
-
-## Customising the media displayed
-
-You control the list of media items inside the `main` container. The `button` elements are used for accessibility to support selecting specific media items.
-
-Currently, only images are supported.
-
-
-## Controlling the media player
-
-### .pause()
-
-Animates to the designated pause point and pauses playback.
-Adds 3 seconds of pause time (durations specified in the animation sequence still apply).
-
-Returns the player object (chainable).
-
-### .play()
-
-Continues the animation sequence from the current position.
-
-Returns the player object (chainable).
-
-## .playPause()
-
-Toggles between play and pause states.
-
-Returns the player object (chainable).
-
-## Customising the sequence of animations
-
-TODO
-
-## Specifying pause points in the animation sequence
-
-TODO
