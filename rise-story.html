@@ -2,18 +2,192 @@
 
 <polymer-element name="rise-story" attributes="companyId folder folderRefresh">
   <template>
-    <rise-storage
+    <style>
+      :host {
+        display: block;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      ul,
+      li {
+        display: block;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+      ul {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      li {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        display: table;
+      }
+
+      button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      figure {
+        margin: 0;
+        padding: 1%;
+        background: #fff;
+        vertical-align: center;
+      }
+
+      /* fade in/out */
+
+      .fade {
+        opacity: 1;
+        transition: opacity .3s ease-in;
+      }
+      .fade-in {
+        opacity: 1;
+      }
+      .hidden * {
+        opacity: 0;
+      }
+
+      li,
+      button,
+      figure,
+      img {
+        display: block;
+        -webkit-backface-visibility: hidden;
+      }
+
+      /* sizing */
+
+      .thumbnail {
+        max-width: 38.2vmin;
+        max-height: 38.2vmin;
+
+        transition: all .3s ease-in;
+      }
+
+      .full {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: rotate(0) !important;
+        max-width: 85.4vmin;
+        max-height: 85.4vmin;
+
+        transition:
+          max-width .7s cubic-bezier(.35,-0.33,.57,1.28),
+          max-height .7s cubic-bezier(.35,-0.33,.57,1.28),
+          top .5s cubic-bezier(.65,1.36,.94,1.09),
+          bottom .5s cubic-bezier(.65,1.36,.94,1.09),
+          left .5s cubic-bezier(.65,1.36,.94,1.09),
+          right .5s cubic-bezier(.65,1.36,.94,1.09),
+          transform .3s ease-out;
+      }
+
+      figure {
+        transition: box-shadow .7s ease;
+      }
+      .thumbnail figure {
+        box-shadow: .3em .3em .7em rgba( 0, 0, 0, 0.8 );
+      }
+      .full figure {
+        box-shadow: 1em 1em 1.5em rgba( 0, 0, 0, 0.5 );
+      }
+    </style>
+
+    <rise-storage id="storage"
       companyId="{{companyId}}"
       folder="{{folder}}"
       folderRefresh="{{folderRefresh}}"
+      on-rise-storage-response="{{storageResponse}}"
     >
     </rise-storage>
+    <ul id="gallery" on-click="{{playerClick}}"></ul>
   </template>
 
+  <script src="node_modules/knuth-shuffle/index.js"></script>
   <script>
-    /* global Polymer */
+  /*global Polymer, knuthShuffle, DOMTokenList*/
+  (function() {
+    "use strict";
+
+    // PRIVATE IMPLEMENTATION
+    var player = {};
+    var playing = false;
+    var paused = false;
+    var pausedTimeout = 3000;
+
+    var MIN_Z_INDEX = 1;
+    var zindex = MIN_Z_INDEX;
+
+    var sequence = [
+      { duration:  100, on: "thumbnail focus",   off: "fade-in hidden"    },
+      { duration:  750, on: "full",              off: "thumbnail fade-in" },
+      { duration: 3500, on: "fade-in thumbnail", off: "full focus"        },
+      { duration:  700, on: "fade-in thumbnail", off: "full focus"        },
+    ];
+    var sequencePauseIndex = 1;
+
+    var playQueue;
+    var mediaIndex = 0;
+    var animationIndex = 0;
+    var then = Date.now();
+
+    // is an element hidden?
+    function isHidden(domElement) {
+      return domElement.classList.contains("hidden");
+    }
+
+    // remove style property
+    // omit value to reset style to "undefined"
+    function setStyle(styleMap) {
+      return function(domElement) {
+        Object.keys(styleMap).forEach(function(prop) {
+          domElement.style[prop] = styleMap[prop];
+        });
+      };
+    }
+
+    // set animation state
+    function setAnimationState(element, classObject) {
+      DOMTokenList.prototype.add.apply(element.classList, classObject.on.split(" "));
+      DOMTokenList.prototype.remove.apply(element.classList, classObject.off.split(" "));
+    }
+
+
+    // POLYMER ELEMENT - PUBLIC API
+
     /*jshint newcap: false */
     Polymer("rise-story", {
+
       /**
        * The ID of the Company.
        *
@@ -43,11 +217,242 @@
       folderRefresh: 0,
 
 
-      storage.addEventListener("rise-storage-response", function(e) {
-        image.setAttribute("src", e.detail[0]);
-      });
+      // clears screen and starts playback
+      reset: function reset() {
+
+      },
 
 
-    });
+      // pause the slideshow
+      pause: function pause() {
+        if (! paused) {
+          animationIndex = sequencePauseIndex;
+          paused = true;
+          then = 0; // triggers animation to run
+        }
+        return player;
+      },
+
+      // play
+      play: function play() {
+        then = Math.min(then, Date.now());
+        if (! playing || paused) {
+          playing = true;
+          paused = false;
+          requestAnimationFrame(this.animateFrame);
+        }
+
+        return player;
+      },
+
+      // pause toggle
+      playToggle: function playToggle() {
+        if (playing) {
+          pause();
+        } else {
+          play();
+        }
+      },
+
+      // stop
+      stop: function stop() {
+        if (playing) {
+          playing = false;
+          paused = false;
+          animationIndex = sequence.length - 1;
+          // finish current element
+          setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
+        }
+        return player;
+      },
+
+
+      // shuffle items for playback
+      shuffle: function shuffle() {
+        var unseenItemsInQueue = playQueue.filter(isHidden);
+
+        zindex = MIN_Z_INDEX;
+
+        if (unseenItemsInQueue.length) {
+          playQueue = playQueue.filter(function(item) {
+            return unseenItemsInQueue.indexOf(item) === -1;
+          });
+          // reset zindex
+          for (var i = 0; i < playQueue.length; i++) {
+            playQueue[i].style.zIndex = ++zindex;
+          }
+          // put hidden items first
+          knuthShuffle(unseenItemsInQueue);
+          knuthShuffle(playQueue);
+          playQueue = unseenItemsInQueue.concat(playQueue);
+        } else {
+          // shuffle the order
+          knuthShuffle(playQueue);
+        }
+
+        // shuffle onscreen positions
+        playQueue.forEach(function(li) {
+          // randomly position
+          li.style.left = (Math.floor(Math.random() * window.innerWidth) - (window.innerWidth / 2)) + "px";
+          li.style.top = (Math.floor(Math.random() * window.innerHeight) - (window.innerHeight / 2)) + "px";
+          li.style.transform = "rotate(" + (Math.floor(Math.random() * 42) - 21) + "deg)";
+        });
+
+        // reset
+        playQueue.forEach(setStyle({ "z-index": 1 }));
+        mediaIndex = 0;
+      },
+
+
+      // render the animation sequence
+      animateFrame: function animateFrame() {
+        var now = Date.now();
+
+        // time to update?
+        if (playing && now - then >= sequence[animationIndex].duration) {
+          if (mediaIndex >= playQueue.length) {
+            if (playQueue.length === 0) {
+              return;
+            }
+            // this.shuffle();
+            console.log( this );
+          }
+
+          // update classes
+          if (animationIndex === 0) {
+            playQueue[mediaIndex].style.zIndex = ++zindex;
+          }
+          setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
+
+          // next in sequence
+          then = now;
+          animationIndex = (animationIndex + 1) % sequence.length;
+
+          // prepare next image
+          if (animationIndex === 0) {
+            mediaIndex++;
+          }
+        }
+
+        // paused?
+        if (paused) {
+          // set pause duration
+          then += pausedTimeout;
+          paused = false;
+        }
+
+        // loop
+        if (playing) {
+          requestAnimationFrame(animateFrame);
+        }
+      },
+
+      // click on media
+      playerClick: function playerClick(event) {
+        event.stopImmediatePropagation();
+
+        var item = event.target;
+        var selectedIndex, selectedItem, upcoming;
+
+        // find LI ancestor
+        while (/^BUTTON|FIGURE|IMG$/i.test(item.tagName) && item.parentNode) {
+          item = item.parentNode;
+        }
+        // is it a media element? find it
+        selectedIndex = playQueue.indexOf(item);
+
+        // selected active item
+        if (selectedIndex === mediaIndex) {
+          // just pause
+          if (! playing) {
+            play();
+          } else {
+            pause();
+          }
+
+        } else if (selectedIndex < playQueue.length) {
+          stop();
+          upcoming = selectedIndex > mediaIndex;
+
+          // move to next play position
+          selectedItem = playQueue.splice(selectedIndex, 1)[0];
+          if (upcoming) {
+            mediaIndex++;
+          }
+          playQueue.splice(mediaIndex, 0, selectedItem);
+
+          // reset animation
+          animationIndex = 0;
+          this.play();
+        }
+      },
+
+      storageResponse: function storageResponse(e) {
+        var urls = e.detail;
+
+        // setup DOM
+        var mediaList = this.$.gallery;
+        var oldMediaList = {};
+        Array.prototype.forEach.call(mediaList.children, function(li) {
+          var src = li.querySelector("img").src;
+          oldMediaList[src] = li;
+        });
+
+        var newItems = [];
+
+        urls.forEach(function(src) {
+          // already have this element
+          if (oldMediaList[src]) {
+            delete oldMediaList[src];
+            return;
+          }
+
+          var li = document.createElement("li");
+          var figure = document.createElement("figure");
+          var button = document.createElement("button");
+          var img = document.createElement("img");
+          img.src = src;
+          img.alt = "";
+
+          // initial animation classes
+          li.classList.add("hidden", "fade", "fade-in", "thumbnail");
+
+          // add to DOM
+          button.appendChild(img);
+          figure.appendChild(button);
+          li.appendChild(figure);
+          newItems.push(li);
+        });
+
+        // stop playing
+        this.stop();
+
+        // remove anything left on the old media list
+        Object.keys(oldMediaList).forEach(function(key) {
+          oldMediaList[key].remove();
+        });
+
+        // add new media
+        newItems.forEach(function(li) {
+          mediaList.appendChild(li);
+        });
+
+        // get the new children list
+        playQueue = Array.prototype.slice.call(mediaList.children);
+        this.shuffle();
+
+        // go
+        animationIndex = 0;
+        this.play();
+      },
+
+
+      // polymer ready
+      ready: function() {
+        this.$.storage.go();
+      }
+    }); // Polymer()
+
+  }()); // closure
   </script>
 </polymer-element>
