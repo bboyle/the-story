@@ -1,0 +1,53 @@
+<link rel="import" href="../../components/rise-storage/rise-storage.html">
+
+<polymer-element name="rise-story" attributes="companyId folder folderRefresh">
+  <template>
+    <rise-storage
+      companyId="{{companyId}}"
+      folder="{{folder}}"
+      folderRefresh="{{folderRefresh}}"
+    >
+    </rise-storage>
+  </template>
+
+  <script>
+    /* global Polymer */
+    /*jshint newcap: false */
+    Polymer("rise-story", {
+      /**
+       * The ID of the Company.
+       *
+       * @attribute companyId
+       * @type string
+       * @default ''
+       */
+      companyId: "",
+
+      /**
+       * The folder name.
+       *
+       * @attribute folder
+       * @type string
+       * @default ''
+       */
+      folder: "",
+
+      /**
+       * The number of seconds before the folder will be checked for changes.
+
+       *
+       * @attribute folderRefresh
+       * @type number
+       * @default 0 (no refresh)
+       */
+      folderRefresh: 0,
+
+
+      storage.addEventListener("rise-storage-response", function(e) {
+        image.setAttribute("src", e.detail[0]);
+      });
+
+
+    });
+  </script>
+</polymer-element>
