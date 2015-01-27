@@ -140,6 +140,7 @@
     "use strict";
 
     // PRIVATE IMPLEMENTATION
+    var riseStoryElement;
     var player = {};
     var playing = false;
     var paused = false;
@@ -180,6 +181,49 @@
     function setAnimationState(element, classObject) {
       DOMTokenList.prototype.add.apply(element.classList, classObject.on.split(" "));
       DOMTokenList.prototype.remove.apply(element.classList, classObject.off.split(" "));
+    }
+
+
+    // render the animation sequence
+    function animateFrame() {
+      var now = Date.now();
+
+      // time to update?
+      if (playing && now - then >= sequence[animationIndex].duration) {
+        if (mediaIndex >= playQueue.length) {
+          if (playQueue.length === 0) {
+            return;
+          }
+          riseStoryElement.shuffle();
+        }
+
+        // update classes
+        if (animationIndex === 0) {
+          playQueue[mediaIndex].style.zIndex = ++zindex;
+        }
+        setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
+
+        // next in sequence
+        then = now;
+        animationIndex = (animationIndex + 1) % sequence.length;
+
+        // prepare next image
+        if (animationIndex === 0) {
+          mediaIndex++;
+        }
+      }
+
+      // paused?
+      if (paused) {
+        // set pause duration
+        then += pausedTimeout;
+        paused = false;
+      }
+
+      // loop
+      if (playing) {
+        requestAnimationFrame(animateFrame);
+      }
     }
 
 
@@ -239,7 +283,7 @@
         if (! playing || paused) {
           playing = true;
           paused = false;
-          requestAnimationFrame(this.animateFrame);
+          requestAnimationFrame(animateFrame);
         }
 
         return player;
@@ -301,50 +345,6 @@
         // reset
         playQueue.forEach(setStyle({ "z-index": 1 }));
         mediaIndex = 0;
-      },
-
-
-      // render the animation sequence
-      animateFrame: function animateFrame() {
-        var now = Date.now();
-
-        // time to update?
-        if (playing && now - then >= sequence[animationIndex].duration) {
-          if (mediaIndex >= playQueue.length) {
-            if (playQueue.length === 0) {
-              return;
-            }
-            // this.shuffle();
-            console.log( this );
-          }
-
-          // update classes
-          if (animationIndex === 0) {
-            playQueue[mediaIndex].style.zIndex = ++zindex;
-          }
-          setAnimationState(playQueue[mediaIndex], sequence[animationIndex]);
-
-          // next in sequence
-          then = now;
-          animationIndex = (animationIndex + 1) % sequence.length;
-
-          // prepare next image
-          if (animationIndex === 0) {
-            mediaIndex++;
-          }
-        }
-
-        // paused?
-        if (paused) {
-          // set pause duration
-          then += pausedTimeout;
-          paused = false;
-        }
-
-        // loop
-        if (playing) {
-          requestAnimationFrame(animateFrame);
-        }
       },
 
       // click on media
@@ -449,9 +449,13 @@
 
       // polymer ready
       ready: function() {
+        // access to 'this' for requestAnimationFrame
+        riseStoryElement = this;
+        // grab data from storage
         this.$.storage.go();
       }
     }); // Polymer()
+
 
   }()); // closure
   </script>

@@ -51,7 +51,6 @@ document.querySelector("rise-story").reset();
 // what about rise-storage API access?
 document.querySelector("rise-story").getStorageComponent();
 
-.animateFrame() // internal use - animates a single frame
 .storageResponse() // internal use - handles rise-storage events
 
 // changes media location (inherited from rise storage)
