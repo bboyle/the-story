@@ -17,9 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "webcomponentsjs": "~0.5.2",
-    "polymer": "~0.5.2",
-    "core-ajax": "Polymer/core-ajax#~0.5.2",
-    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~0.1.1"
+    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~1.0.4"
   }
 }
