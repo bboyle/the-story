@@ -7,10 +7,13 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 
 ## Built With
 
-- POSH (plain ol' semantic HTML)
-- CSS3
-- vanilla javascript
-- node and bower
+- [Polymer](https://www.polymer-project.org/)
+- [Rise storage](https://github.com/Rise-Vision/web-component-rise-storage)
+  - *includes webcomponents and polymer core objects*
+- [npm](https://www.npmjs.org)
+- [Bower](http://bower.io/)
+- [Gulp](http://gulpjs.com/)
+- [web-component-tester](https://github.com/Polymer/web-component-tester) for testing
 
 ## Development
 
