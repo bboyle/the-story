@@ -1,4 +1,4 @@
-<link rel="import" href="../../components/rise-storage/rise-storage.html">
+<link rel="import" href="../rise-storage/rise-storage.html">
 
 <polymer-element name="rise-story" attributes="companyId folder folderRefresh">
   <template>
@@ -388,7 +388,7 @@
       },
 
       storageResponse: function storageResponse(e) {
-        var urls = e.detail;
+        var files = e.detail.files;
 
         // setup DOM
         var mediaList = this.$.gallery;
@@ -400,7 +400,8 @@
 
         var newItems = [];
 
-        urls.forEach(function(src) {
+        files.forEach(function(file) {
+          var src = file.url;
           // already have this element
           if (oldMediaList[src]) {
             delete oldMediaList[src];

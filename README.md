@@ -9,7 +9,7 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 
 - [Polymer](https://www.polymer-project.org/)
 - [Rise storage](https://github.com/Rise-Vision/web-component-rise-storage)
-  - *includes webcomponents and polymer core objects*
+  - *includes webcomponents and polymer core elements*
 - [npm](https://www.npmjs.org)
 - [Bower](http://bower.io/)
 - [Gulp](http://gulpjs.com/)
@@ -33,15 +33,17 @@ For convenience, dependencies are included in this repository. If you wish to ma
 
 ### Run Local
 
-View through a local webserver. Node [http-server](https://www.npmjs.org/package/http-server) or python recommended. Run on port 8000 using one of the commands below:
+View through a local webserver. Node [http-server](https://www.npmjs.org/package/http-server) or python recommended. You will need to set the parent directory as the root so polymer components are available. Run on port 8000 using one of the commands below:
 
 ```shell
-http-server -p 8000
+http-server -p 8000 ../
 ```
 or
 ```shell
-python -m SimpleHTTPServer
+python -m SimpleHTTPServer ../
 ```
+
+Then visit the test page at http://localhost:8000/the-story/test/
 
 ### Dependencies
 
