@@ -1,5 +1,5 @@
-present-data
-============
+The Story
+=========
 
 ## Introduction
 
@@ -23,27 +23,39 @@ A visual presentation of data. Thumbnails (representing data) are randomly loope
 For convenience, dependencies are included in this repository. If you wish to manage dependencies with package manager tools:
 
 - install node and npm package manager
-- install gulp build tool: `npm install -g gulp`
-- install bower package manager: `npm install -g bower`
-- install dependencies using: `bower install`
+- install global dependencies:
+  - gulp build tool: `npm install -g gulp`
+  - install bower package manager: `npm install -g bower`
+- install dependencies using: `npm install` (this will also run `bower install` to install web components).
 
 ### Run Local
 
-- view through a local webserver. [http-server](https://www.npmjs.org/package/http-server) recommended.
+View through a local webserver. Node [http-server](https://www.npmjs.org/package/http-server) or python recommended. Run on port 8000 using one of the commands below:
+
+```shell
+http-server -p 8000
+```
+or
+```shell
+python -m SimpleHTTPServer
+```
 
 ### Dependencies
 
-- internet connection for loading media
-- front-end dependencies (packaged in with this repo)
+**Note:** web components are installed in a folder at the same level as this repo (*not* inside the repo), as recommended in the [polymer docs](https://www.polymer-project.org/0.5/docs/start/reusableelements.html#create)
+
+- web components (install with `bower install`)
   - [rise-storage web component](https://github.com/Rise-Vision/web-component-rise-storage)
+- libraries and scripts (install with `npm install`)
   - [knuth-shuffle](https://github.com/coolaj86/knuth-shuffle)
-- development dependencies (gulp and plugins): install using `npm install`
+- development dependencies: gulp and plugins (install using `npm install`)
 
 ### Testing
 
 _To be developed_
 
 ## Submitting Issues
+
 If you encounter problems or find defects we really want to hear about them. If you could take the time to add them as issues to this Repository it would be most appreciated. When reporting issues please use the following format where applicable:
 
 **Reproduction Steps**
@@ -61,6 +73,7 @@ What you expected to happen.
 What actually happened. (screenshots / video captures always help)
 
 ## Contributing
+
 All contributions are greatly appreciated and welcome! If you would first like to sound out your contribution ideas please post your thoughts to our [community](http://community.risevision.com), otherwise submit a pull request and we will do our best to incorporate it.
 
 ### Languages
