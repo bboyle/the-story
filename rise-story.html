@@ -288,9 +288,9 @@
       // pause toggle
       playToggle: function playToggle() {
         if (playing) {
-          pause();
+          this.pause();
         } else {
-          play();
+          this.play();
         }
       },
 
@@ -362,13 +362,13 @@
         if (selectedIndex === mediaIndex) {
           // just pause
           if (! playing) {
-            play();
+            this.play();
           } else {
-            pause();
+            this.pause();
           }
 
         } else if (selectedIndex < playQueue.length) {
-          stop();
+          this.stop();
           upcoming = selectedIndex > mediaIndex;
 
           // move to next play position
