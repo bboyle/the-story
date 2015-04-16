@@ -105,10 +105,6 @@
         transition:
           max-width .7s cubic-bezier(.35,-0.33,.57,1.28),
           max-height .7s cubic-bezier(.35,-0.33,.57,1.28),
-          top .5s cubic-bezier(.65,1.36,.94,1.09),
-          bottom .5s cubic-bezier(.65,1.36,.94,1.09),
-          left .5s cubic-bezier(.65,1.36,.94,1.09),
-          right .5s cubic-bezier(.65,1.36,.94,1.09),
           transform .3s ease-out;
       }
 
@@ -337,9 +333,10 @@
         // shuffle onscreen positions
         playQueue.forEach(function(li) {
           // randomly position
-          li.style.left = (Math.floor(Math.random() * window.innerWidth) - (window.innerWidth / 2)) + "px";
-          li.style.top = (Math.floor(Math.random() * window.innerHeight) - (window.innerHeight / 2)) + "px";
-          li.style.transform = "rotate(" + (Math.floor(Math.random() * 42) - 21) + "deg)";
+          var x = Math.floor(Math.random() * window.innerWidth) - (window.innerWidth / 2);
+          var y = Math.floor(Math.random() * window.innerHeight) - (window.innerHeight / 2);
+          var r = Math.floor(Math.random() * 42) - 21;
+          li.style.transform = "translate(" + x + "px, " + y + "px) rotate(" + r + "deg)";
         });
 
         // reset
