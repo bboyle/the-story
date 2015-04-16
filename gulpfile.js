@@ -12,7 +12,7 @@
   });
 
   gulp.task("lintHTML", function() {
-    return gulp.src("src/*.html")
+    return gulp.src("rise-story.html")
       .pipe(jshint.extract("always"))
       .pipe(jshint())
       .pipe(jshint.reporter("jshint-stylish"))
