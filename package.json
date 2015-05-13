@@ -1,5 +1,5 @@
 {
-  "name": "The Story",
+  "name": "the-story",
   "version": "0.0.1",
   "description": "Visual presentation of data (like pictures on a coffee table)",
   "main": "gulpfile.js",
