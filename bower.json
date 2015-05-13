@@ -17,6 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~1.0.4"
+    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~1.0.7"
   }
 }
