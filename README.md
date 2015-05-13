@@ -57,7 +57,11 @@ Then visit the test page at http://localhost:8000/the-story/test/
 
 ### Testing
 
-_To be developed_
+Tests are found in the `test/` folder and run with [web-component-tester](https://github.com/Polymer/web-component-tester).
+
+1. `bower install web-component-tester`
+2. `npm install -g web-component-tester`
+3. run tests with `npm test` (Note: tests are run from the parent folder: `cd .. && wct the-story/test/index.html`)
 
 ## Submitting Issues
 

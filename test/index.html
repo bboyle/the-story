@@ -7,13 +7,14 @@
   <link rel="stylesheet" href="../src/css/init.css">
 
   <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../rise-story.html">
 
 </head>
 <body unresolved>
 
   <main>
-    <rise-story
+    <rise-story id="fixture"
       companyId="76ef5f8c-cd7b-4041-bff2-728a81366d12"
       folder="the-story/birds"
       folderRefresh="60">
@@ -21,6 +22,14 @@
   </main>
 
   <script src="../src/js/viewportSize.js"></script>
+
+  <script>
+    suite('<rise-story>', function() {
+      test('is present', function() {
+        assert.strictEqual(document.getElementById('fixture').tagName, 'RISE-STORY', 'custom element exists');
+      });
+    });
+  </script>
 
 </body>
 </html>
