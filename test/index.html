@@ -26,8 +26,21 @@
   <script>
     suite('<rise-story>', function() {
       test('is present', function() {
-        assert.strictEqual(document.getElementById('fixture').tagName, 'RISE-STORY', 'custom element exists');
+        var storyElement = document.getElementById('fixture');
+        assert.strictEqual(storyElement.tagName, 'RISE-STORY', 'custom element exists');
       });
+
+      // after loading, thumbnails are created for images
+
+      // over time, the thumbnails animate and the number that are visible increases
+
+      // when the refresh timer hits, the position of all thumbnails is shuffled
+
+      // when refreshing, new images are shuffled into the thumbnails (that are yet to be shown)
+
+      // clicking a thumbnail causes it to be shown in full and pauses playback
+
+      // thumbnails can be repositioned with drag and drop
     });
   </script>
 
