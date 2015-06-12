@@ -1,4 +1,5 @@
 <link rel="import" href="../rise-storage/rise-storage.html">
+<link rel="import" href="rise-story-thumbnail.html">
 
 <polymer-element name="rise-story" attributes="companyId folder folderRefresh">
   <template>
@@ -15,52 +16,15 @@
         pointer-events: none;
       }
 
-      img {
-        max-width: 100%;
-        max-height: 100%;
-      }
-
-      ul,
-      li {
+      :host > div {
         display: block;
         list-style: none;
         margin: 0;
         padding: 0;
         text-align: center;
-      }
-      ul {
         position: relative;
         width: 100%;
         height: 100%;
-      }
-      li {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        display: table;
-      }
-
-      button {
-        cursor: pointer;
-        background: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: auto;
-        display: table-cell;
-        vertical-align: middle;
-      }
-
-      figure {
-        margin: 0;
-        padding: 1%;
-        background: #fff;
-        vertical-align: center;
       }
 
       /* fade in/out */
@@ -72,16 +36,9 @@
       .fade-in {
         opacity: 1;
       }
-      .hidden * {
+      .hidden {
         opacity: 0;
-      }
-
-      li,
-      button,
-      figure,
-      img {
-        display: block;
-        -webkit-backface-visibility: hidden;
+        display: none;
       }
 
       /* sizing */
@@ -106,16 +63,6 @@
           max-height .7s cubic-bezier(.35,-0.33,.57,1.28),
           transform .3s ease-out;
       }
-
-      figure {
-        transition: box-shadow .7s ease;
-      }
-      .thumbnail figure {
-        box-shadow: .3em .3em .7em rgba( 0, 0, 0, 0.8 );
-      }
-      .full figure {
-        box-shadow: 1em 1em 1.5em rgba( 0, 0, 0, 0.5 );
-      }
     </style>
 
     <rise-storage id="storage"
@@ -125,7 +72,7 @@
       on-rise-storage-response="{{storageResponse}}"
     >
     </rise-storage>
-    <ul id="gallery" on-click="{{playerClick}}"></ul>
+    <div id="gallery" on-click="{{playerClick}}"></div>
   </template>
 
   <script src="node_modules/knuth-shuffle/index.js"></script>
@@ -404,20 +351,22 @@
             return;
           }
 
-          var li = document.createElement("li");
-          var figure = document.createElement("figure");
-          var button = document.createElement("button");
-          var img = document.createElement("img");
-          img.src = src;
-          img.alt = "";
+          // var li = document.createElement("li");
+          // var figure = document.createElement("figure");
+          // var button = document.createElement("button");
+          // var img = document.createElement("img");
+          // img.src = src;
+          // img.alt = "";
+          var li = document.createElement('rise-story-thumbnail');
+          li.src = src;
 
           // initial animation classes
           li.classList.add("hidden", "fade", "fade-in", "thumbnail");
 
           // add to DOM
-          button.appendChild(img);
-          figure.appendChild(button);
-          li.appendChild(figure);
+          // button.appendChild(img);
+          // figure.appendChild(button);
+          // li.appendChild(figure);
           newItems.push(li);
         });
 
@@ -448,6 +397,7 @@
       ready: function() {
         // access to 'this' for requestAnimationFrame
         riseStoryElement = this;
+
         // grab data from storage
         this.$.storage.go();
       }

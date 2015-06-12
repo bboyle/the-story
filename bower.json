@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~1.0.7"
+    "rise-storage": "https://github.com/Rise-Vision/web-component-rise-storage.git#~1.0.7",
+    "core-drag-drop": "Polymer/core-drag-drop#0.5"
   }
 }

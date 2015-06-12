@@ -1,0 +1,139 @@
+<link rel="import" href="../core-drag-drop/core-drag-drop.html">
+
+<polymer-element name="rise-story-thumbnail" attributes="src alt">
+  <template>
+    <style>
+      :host {
+        display: block;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+
+      button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      figure {
+        margin: 0;
+        padding: 1%;
+        background: #fff;
+        vertical-align: center;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      button,
+      figure,
+      img {
+        display: block;
+        -webkit-backface-visibility: hidden;
+      }
+
+      figure {
+        transition: box-shadow .7s ease;
+      }
+      :host(.thumbnail) figure {
+        box-shadow: .3em .3em .7em rgba( 0, 0, 0, 0.8 );
+      }
+      figure {
+        box-shadow: 1em 1em 1.5em rgba( 0, 0, 0, 0.5 );
+      }
+    </style>
+
+      <figure>
+        <core-drag-drop></core-drag-drop>
+        <button>
+          <img src="{{src}}" alt="{{alt}}">
+        </button>
+      </figure>
+
+  </template>
+
+  <script src="node_modules/knuth-shuffle/index.js"></script>
+  <script>
+  /*global Polymer, knuthShuffle, DOMTokenList*/
+  (function() {
+    "use strict";
+
+    // POLYMER ELEMENT - PUBLIC API
+
+    /*jshint newcap: false */
+    Polymer("rise-story-thumbnail", {
+
+      /**
+       * The ID of the Company.
+       *
+       * @attribute companyId
+       * @type string
+       * @default ''
+       */
+      src: "",
+
+      /**
+       * The folder name.
+       *
+       * @attribute folder
+       * @type string
+       * @default ''
+       */
+      alt: "",
+
+      // x: 0,
+      // y: 0,
+
+      // moveBy: function(dx, dy) {
+      //   console.log('moveBy', dx, dy);
+      //   this.x += dx;
+      //   this.y += dy;
+      //   this.style.left = this.x;
+      //   this.style.top = this.y;
+      // },
+
+
+      // polymer ready
+      ready: function() {
+        // var thumbnail = this;
+
+        // addEventListener("drag-start", function(e) {
+        //   console.log("drag-start", e, thumbnail);
+        //   var dragInfo = e.detail;
+        //   // var origin = {
+        //   //   x: e.detail.event.clientX,
+        //   //   y: e.detail.event.clientY
+        //   // };
+        //   // dragInfo.avatar.appendChild(thumbnail);
+
+        //   // dragInfo.drag = function(dragInfo) {
+        //   //   console.log(dragInfo);
+        //   //   // thumbnail.moveBy(dragInfo.event.clientX - origin.x, dragInfo.event.clientY - origin.y);
+
+        //   // };
+        //   // dragInfo.drop = drop;
+        // });
+      }
+    }); // Polymer()
+
+
+  }()); // closure
+  </script>
+</polymer-element>
